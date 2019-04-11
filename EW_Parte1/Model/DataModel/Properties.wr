@@ -79,6 +79,5 @@
       <db:JoinColumn attribute="ent1#att1" name="evento_oid"/>
     </RelationshipRole2>
   </Relationship>
-  <db:Database id="db1" name="Database1" type="MySQL" url="jdbc:mysql://localhost:3306/ew_tp" username="root" cryptedPassword="true" password="cGFzcw==">
-  </db:Database>
+  <db:Database id="db1" name="Database1" type="MySQL" url="jdbc:mysql://localhost:3306/ew_tp" username="root" cryptedPassword="true" password="cGFzcw=="/>
 </DataModel>

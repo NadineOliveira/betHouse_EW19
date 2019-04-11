@@ -1,0 +1,10 @@
+<OperationModule xmlns:gr="http://www.webratio.com/2006/WebML/Graph" gr:x="125" gr:y="90" id="mov2#opm3" name="Login">
+  <OperationUnits>
+    <InputCollectorUnit id="mov2#opm3#icu3" gr:x="30" gr:y="60">
+      <InputCollectorParameter id="mov2#opm3#icu3#icp2" name="Password"/>
+      <InputCollectorParameter id="mov2#opm3#icu3#icp1" name="Username"/>
+    </InputCollectorUnit>
+    <OKCollectorUnit gr:x="350" gr:y="45" id="mov2#opm3#okcu1" name="OK Port"/>
+    <KOCollectorUnit gr:x="370" gr:y="155" id="mov2#opm3#kocu1" name="KO Port1"/>
+  </OperationUnits>
+</OperationModule>

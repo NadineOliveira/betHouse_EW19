@@ -1,0 +1,29 @@
+<Page xmlns:gr="http://www.webratio.com/2006/WebML/Graph" xmlns:layout="http://www.webratio.com/2006/WebML/Layout" gr:x="0" gr:y="0" id="sv1#area3#page5" name="Login" landmark="true" secure="false" localized="false">
+  <ContentUnits>
+    <EntryUnit gr:x="0" gr:y="0" id="sv1#area3#page5#enu2" name="Login" entity="User" customDescriptor="false">
+      <Field id="sv1#area3#page5#enu2#fld2" name="Username" type="string" modifiable="true"/>
+      <Field id="sv1#area3#page5#enu2#fld3" name="Password" type="password" modifiable="true" hidden="false"/>
+    </EntryUnit>
+  </ContentUnits>
+  <layout:Grid containerType="grid">
+    <layout:Row>
+      <layout:Cell colspan="12">
+        <layout:Unit unitId="sv1#area3#page5#enu2">
+          <layout:Field field="sv1#area3#page5#enu2#fld2"/>
+          <layout:Field field="sv1#area3#page5#enu2#fld3"/>
+        </layout:Unit>
+      </layout:Cell>
+      <layout:Cell/>
+      <layout:Cell/>
+      <layout:Cell/>
+      <layout:Cell/>
+      <layout:Cell/>
+      <layout:Cell/>
+      <layout:Cell/>
+      <layout:Cell/>
+      <layout:Cell/>
+      <layout:Cell/>
+      <layout:Cell/>
+    </layout:Row>
+  </layout:Grid>
+</Page>
