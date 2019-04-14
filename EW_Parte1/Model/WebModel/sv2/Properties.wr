@@ -1,5 +1,0 @@
-<SiteView xmlns:gr="http://www.webratio.com/2006/WebML/Graph" id="sv2" name="Login" homePage="sv2#page7">
-  <OperationUnits>
-    <ModuleInstanceUnit gr:x="390" gr:y="185" id="sv2#miu6" action="true" moduleId="mov2#opm3"/>
-  </OperationUnits>
-</SiteView>
