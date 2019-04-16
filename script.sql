@@ -21,16 +21,19 @@ VALUES
 (1,1),
 (2,2),
 (3,3);
+
 INSERT INTO `ew_tp`.`user`
 (`oid`,
 `username`,
 `password`,
 `email`,
+`saldo`,
 `group_oid`)
 VALUES
-(1,'n','n','n@alunos.com','1'),
-(2,'u','u','u@alunos.com','2'),
-(3,'a','a','a@alunos.com','3');
+(1,'n','n','n@alunos.com',22.20,'1'),
+(2,'u','u','u@alunos.com',12.30,'2'),
+(3,'a','a','a@alunos.com',12.00,'3');
+
 INSERT INTO `ew_tp`.`user_group`
 (`user_oid`,
 `group_oid`)
