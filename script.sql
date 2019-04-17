@@ -9,7 +9,8 @@ VALUES
 (4,'area1','Perfil'),
 (5,'area7','HistoricoEquipas'),
 (6,'page9','EventosPremium'),
-(7,'sv5','Admin');
+(7,'sv5','Admin'),
+(8,'area5','Admin');
 INSERT INTO `ew_tp`.`group`
 (`oid`,
 `groupname`,
@@ -17,7 +18,7 @@ INSERT INTO `ew_tp`.`group`
 VALUES
 (1,'Regular','1'),
 (2,'Premium','1'),
-(3,'Admin','3');
+(3,'Admin','8');
 INSERT INTO `ew_tp`.`group_module`
 (`group_oid`,
 `module_oid`)
@@ -32,7 +33,8 @@ VALUES
 (2,4),
 (2,5),
 (2,6),
-(3,7);
+(3,7),
+(3,8);
 
 INSERT INTO `ew_tp`.`user`
 (`oid`,
