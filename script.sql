@@ -10,7 +10,8 @@ VALUES
 (5,'area7','HistoricoEquipas'),
 (6,'page9','EventosPremium'),
 (7,'sv5','Admin'),
-(8,'area5','Admin');
+(8,'area5','Admin'),
+(9,'sv3','Users');
 INSERT INTO `ew_tp`.`group`
 (`oid`,
 `groupname`,
@@ -27,12 +28,14 @@ VALUES
 (1,2),
 (1,3),
 (1,4),
+(1,9),
 (2,1),
 (2,2),
 (2,3),
 (2,4),
 (2,5),
 (2,6),
+(2,9),
 (3,7),
 (3,8);
 
