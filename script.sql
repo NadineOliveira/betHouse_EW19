@@ -3,23 +3,35 @@ INSERT INTO `ew_tp`.`module`
 `moduleid`,
 `modulename`)
 VALUES
-(1,'sv3','ClienteRegular'),
-(2,'sv4','ClientePremium'),
-(3,'sv5','Admin');
+(1,'area3','GerirEventos'),
+(2,'page2','Eventos'),
+(3,'area4','Apostar'),
+(4,'area1','Perfil'),
+(5,'area7','HistoricoEquipas'),
+(6,'page9','EventosPremium'),
+(7,'sv5','Admin');
 INSERT INTO `ew_tp`.`group`
 (`oid`,
 `groupname`,
 `module_oid`)
 VALUES
 (1,'Regular','1'),
-(2,'Premium','2'),
+(2,'Premium','1'),
 (3,'Admin','3');
 INSERT INTO `ew_tp`.`group_module`
 (`group_oid`,
 `module_oid`)
 VALUES
 (1,1),
+(1,2),
+(1,3),
+(1,4),
+(2,1),
 (2,2),
+(2,3),
+(2,4),
+(2,5),
+(2,6),
 (3,3);
 
 INSERT INTO `ew_tp`.`user`
@@ -56,10 +68,11 @@ INSERT INTO `ew_tp`.`evento`
 `oddx`,
 `odd2`,
 `data`,
-`estado`)
+`estado`,
+`premium`)
 VALUES
-(1,1.3,2.5,2.3,'2019-11-22','Aberto'),
-(2,1.9,4,1.3,'2019-11-24','Aberto');
+(1,1.3,2.5,2.3,'2019-11-22','Aberto','true'),
+(2,1.9,4,1.3,'2019-11-24','Aberto','false');
 
 INSERT INTO `ew_tp`.`equipa_evento`
 (`equipa_oid`,
