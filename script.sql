@@ -32,7 +32,7 @@ VALUES
 (2,4),
 (2,5),
 (2,6),
-(3,3);
+(3,7);
 
 INSERT INTO `ew_tp`.`user`
 (`oid`,
