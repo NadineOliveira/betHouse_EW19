@@ -50,5 +50,24 @@ VALUES
 (2,'Braga'),
 (3,'Benfica'),
 (4,'Sporting');
+INSERT INTO `ew_tp`.`evento`
+(`oid`,
+`odd1`,
+`oddx`,
+`odd2`,
+`data`)
+VALUES
+(1,1.3,2.5,2.3,'2019-11-22'),
+(2,1.9,4,1.3,'2019-11-24');
+
+INSERT INTO `ew_tp`.`equipa_evento`
+(`equipa_oid`,
+`evento_oid`)
+VALUES
+(1,1),
+(2,1),
+(3,2),
+(4,2);
+
 
 
