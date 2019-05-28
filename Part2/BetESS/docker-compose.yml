@@ -1,0 +1,96 @@
+version: '3.3'
+services:
+  gateway:
+    image: nginx:latest
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./proxy/default.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - eventos
+    networks:
+      - network_geral
+  eventos:
+    container_name: eventos
+    build: ./eventos
+    environment:
+    - ZMQ_EVENTOS_PUB_ADDRESS=tcp://*:4001
+    - ZMQ_APOSTAS_PUB_ADDRESS=tcp://apostas:4001
+    - ZMQ_UTILIZADORES_PUB_ADDRESS=tcp://utilizadores:4001
+    image: eventos
+    volumes:
+      - ./eventos/:/usr/src/app
+    ports:
+      - 3001:3001
+      - 9201:9201
+    depends_on:
+      - bd_eventos
+    networks:
+      - network_geral
+  bd_eventos:
+    image: mongo
+    container_name: bd_eventos
+    restart: unless-stopped
+    volumes:
+      - ./eventos/data:/data/db
+    ports:
+      - 27017:27017
+    networks:
+      - network_geral
+  apostas:
+    container_name: apostas
+    build: ./apostas
+    environment:
+    - ZMQ_EVENTOS_PUB_ADDRESS=tcp://eventos:4001
+    - ZMQ_APOSTAS_PUB_ADDRESS=tcp://*:4001
+    - ZMQ_UTILIZADORES_PUB_ADDRESS=tcp://utilizadores:4001
+    image: apostas
+    volumes:
+      - ./apostas/:/usr/src/app
+    ports:
+      - 3002:3002
+      - 9202:9202
+    depends_on:
+      - bd_apostas
+    networks:
+      - network_geral
+  bd_apostas:
+    image: mongo
+    container_name: bd_apostas
+    restart: unless-stopped
+    volumes:
+      - ./apostas/data:/data/db
+    ports:
+      - 27018:27017
+    networks:
+      - network_geral
+  utilizadores:
+    container_name: utilizadores
+    build: ./utilizadores
+    environment:
+    - ZMQ_EVENTOS_PUB_ADDRESS=tcp://eventos:4001
+    - ZMQ_APOSTAS_PUB_ADDRESS=tcp://apostas:4001
+    - ZMQ_UTILIZADORES_PUB_ADDRESS=tcp://*:4001
+    image: utilizadores
+    volumes:
+      - ./utilizadores/:/usr/src/app
+    ports:
+      - 3003:3003
+      - 9203:9203
+    networks:
+      - network_geral
+  bd_utilizadores:
+    image: mongo
+    container_name: bd_utilizadores
+    restart: unless-stopped
+    volumes:
+      - ./utilizadores/data:/data/db
+    ports:
+      - 27019:27017
+    networks:
+      - network_geral
+
+networks:
+  network_geral:
+    driver: bridge
