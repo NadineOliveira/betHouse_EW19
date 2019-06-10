@@ -4,8 +4,6 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-var indexRouter = require('./routes/index');
-
 var app = express();
 
 var mongoose = require('mongoose')
@@ -38,27 +36,16 @@ sub_socket.connect(utilizadores_address);
 sub_socket.subscribe("apostas");
 
 
-sub_socket.on('message', function(topic, message) {
-  console.log('Apostas recebeu topico:', topic.toString(), 'com mensagem:', message.toString());
-  trataPedido (message);
-});
-
 const trataPedido = (message) => {
   console.log("Apostas: Recebi pedido")
 };
 
-
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
 
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
-app.use('/apostas', indexRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -75,5 +62,25 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+
+
+// Rotas começam aqui
+app.get("/apostas", async (req, res) => {
+  res.send("Apostas recebeu pedido");
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 module.exports = app;
