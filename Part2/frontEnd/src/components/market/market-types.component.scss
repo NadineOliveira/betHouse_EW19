@@ -1,0 +1,20 @@
+@import '../../assets/colors';
+
+.market-runner__types {
+    background-color: $brow;
+    display: flex;
+    justify-content: flex-end;
+    padding: 0px 14px;
+
+    .market-runner__type {
+        margin: 5px;
+        width: 38px;
+        max-width: 38px;
+        padding: 0 10px;
+        text-align: center;
+        text-transform: uppercase;
+        font-size: 10px;
+        color: $brow-lighter;
+        font-weight: bold;
+    }
+}

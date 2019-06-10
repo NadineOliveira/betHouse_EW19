@@ -1,0 +1,184 @@
+{
+    "countries": [
+        {
+            "id": "country-pt",
+            "name": "Portugal",
+            "locale": "pt-pt",
+            "language": "pt",
+            "flag": ""
+        },
+        {
+            "id": "country-es",
+            "name": "Spain",
+            "locale": "es-es",
+            "language": "es",
+            "flag": ""
+        },
+        {
+            "id": "country-en",
+            "name": "Great Britain",
+            "locale": "en-gb",
+            "language": "en",
+            "flag": ""
+        },
+        {
+            "id": "country-de",
+            "name": "Germany",
+            "locale": "de-de",
+            "language": "de",
+            "flag": ""
+        },
+        {
+            "id": "country-it",
+            "name": "Italy",
+            "locale": "it-it",
+            "language": "it",
+            "flag": ""
+        }
+    ],
+    "competitions": [
+        {
+            "id": "competition-pt-1",
+            "name": "Primeira Liga",
+            "countryId": "country-pt"
+        },
+        {
+            "id": "competition-pt-2",
+            "name": "Segunda Liga",
+            "countryId": "country-pt"
+        },
+        {
+            "id": "competition-pt-3",
+            "name": "Taça da Liga",
+            "countryId": "country-pt"
+        },
+        {
+            "id": "competition-es-1",
+            "name": "Primera División",
+            "countryId": "country-es"
+        }
+    ],
+    "events": [
+        {
+            "id": "event-pt-1-1",
+            "name": "SC Braga - S. Clara",
+            "status": "CLOSED",
+            "competitionId": "competition-pt-1",
+            "startTime": "2019-04-10T21:00:00.000Z"
+        },
+        {
+            "id": "event-pt-1-2",
+            "name": "FC Porto - Boavista",
+            "status": "OPEN",
+            "competitionId": "competition-pt-1",
+            "startTime": "2019-04-13T14:00:00.000Z"
+        },
+        {
+            "id": "event-es-1-1",
+            "name": "FC Barcelona - Real Madrid",
+            "status": "OPEN",
+            "competitionId": "competition-es-1",
+            "startTime": "2019-04-13T14:00:00.000Z"
+        }
+    ],
+    "markets": [
+        {
+            "id": "market-pt-1-1-1",
+            "name": "SC Braga - Santa Clara",
+            "eventId": "event-pt-1-1",
+            "marketType": "MATCH_ODDS",
+            "status": "CLOSED",
+            "runners": [
+                {
+                    "type": "HOME",
+                    "odds": 1.2,
+                    "selectionId": "selection-pt-scbraga"
+                },
+                {
+                    "type": "DRAW",
+                    "odds": 0.5,
+                    "selectionId": "selection-draw"
+                },
+                {
+                    "type": "AWAY",
+                    "odds": 2.1,
+                    "selectionId": "selection-pt-sclara"
+                }
+            ]
+        },
+        {
+            "id": "market-pt-1-2-1",
+            "name": "FC Porto - SC Braga",
+            "eventId": "event-pt-1-2",
+            "marketType": "MATCH_ODDS",
+            "status": "OPEN",
+            "runners": [
+                {
+                    "type": "HOME",
+                    "odds": 1.2,
+                    "selectionId": "selection-pt-fcporto"
+                },
+                {
+                    "type": "DRAW",
+                    "odds": 0.5,
+                    "selectionId": "selection-draw"
+                },
+                {
+                    "type": "AWAY",
+                    "odds": 2.1,
+                    "selectionId": "selection-pt-scbraga"
+                }
+            ]
+        },
+        {
+            "id": "market-es-1-1-1",
+            "name": "FC Barcelona - Real Madrid",
+            "eventId": "event-es-1-1",
+            "marketType": "MATCH_ODDS",
+            "status": "OPEN",
+            "runners": [
+                {
+                    "type": "HOME",
+                    "odds": 1.2,
+                    "selectionId": "selection-es-real_madrid"
+                },
+                {
+                    "type": "DRAW",
+                    "odds": 0.5,
+                    "selectionId": "selection-draw"
+                },
+                {
+                    "type": "AWAY",
+                    "odds": 2.1,
+                    "selectionId": "selection-es-fcbarcelona"
+                }
+            ]
+        }
+    ],
+    "selections": [
+        {
+            "id": "selection-draw",
+            "name": "draw"
+        },
+        {
+            "id": "selection-pt-scbraga",
+            "name": "SC Braga"
+        },
+        {
+            "id": "selection-pt-sclara",
+            "name": "Santa Clara"
+        },
+        {
+            "id": "selection-pt-fcporto",
+            "name": "FC Porto"
+        },
+        {
+            "id": "selection-es-real_madrid",
+            "name": "Real Madrid"
+        },
+        {
+            "id": "selection-es-fcbarcelona",
+            "name": " FC Barcelona"
+        }
+    ]
+}
