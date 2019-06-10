@@ -69,13 +69,9 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  res.json({erro: err});
 });
 
 
-// Rotas começam aqui
-app.get("/eventos", async (req, res) => {
-  res.send("Eventos recebeu pedido");
-})
 
 module.exports = app;

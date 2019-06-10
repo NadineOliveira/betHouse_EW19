@@ -1,0 +1,1 @@
+module.exports={tokenKey:"EW2019"}
