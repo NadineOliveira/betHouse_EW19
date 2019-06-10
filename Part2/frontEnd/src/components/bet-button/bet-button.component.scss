@@ -1,0 +1,21 @@
+@import "../../assets/colors";
+
+.bet__button {
+    display: inline-block;
+    margin: 5px;
+    width: 38px;
+    max-width: 38px;
+    padding: 10px;
+    text-align: center;
+    border-radius: 4px;
+    font-weight: bold;
+    background: $brow;
+    border: 1px solid $brow-dark;
+    color: $brow-lighter;
+
+    &.active {
+        background: $brow-lighter;
+        border: 1px solid $brow-light;
+        color: $brow;
+    }
+}

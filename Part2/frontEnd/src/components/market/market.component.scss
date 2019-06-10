@@ -1,0 +1,17 @@
+@import '../../assets/colors';
+
+.market {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid $brow-lighter;
+    padding: 4px 14px;
+
+    &:nth-child(even) {
+        background-color: $white;
+    }
+
+    &:nth-child(odd) {
+        background-color: $brow-lighter;
+    }
+}

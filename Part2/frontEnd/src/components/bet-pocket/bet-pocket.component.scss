@@ -1,0 +1,89 @@
+@import "../../assets/colors";
+
+.bet-pocket {
+    padding: 20px 0 0 16px;
+    display: flex;
+    align-items: center;
+    position: relative;
+
+    .bet-pocket-button {
+        border: 2px solid $brow-light;
+        color: $brow-lighter;
+        padding: 4px 4px;
+        border-radius: 4px;
+        font-weight: bold;
+        width: 75px;
+    }
+
+    .bet-pocket-button__label,
+    .bet-pocket-button__counter {
+        display: inline-block;
+    }
+
+    .bet-pocket-button__label {
+        padding: 0 2px 0 4px;
+    }
+
+    .bet-pocket-button__counter {
+        padding: 0 4px 0 2px;
+        width: 22px;
+        border-right: 1px solid $brow-light;
+        text-align: right;
+    }
+
+    .bet-pocket-bets {
+        position: absolute;
+        right: 0;
+        top: 52px;
+        width: 250px;
+        min-height: 50px;
+        background-color: $brow-darker;
+        padding: 5px;
+    }
+
+    .bet-pocket-bet {
+        padding: 4px 8px;
+        display: flex;
+        justify-content: space-between;
+
+        &:nth-child(even) {
+            background-color: $white;
+        }
+
+        &:nth-child(odd) {
+            background-color: $brow-lighter;
+        }
+
+        .bet-pocket-bet__name,
+        .bet-pocket-bet__price,
+        .bet-pocket-bet__quantity {
+            font-size: 10px;
+        }
+
+        .bet-pocket-bet__price,
+        .bet-pocket-bet__quantity {
+            flex: 1;
+            width: 70px;
+        }
+
+        .bet-pocket-bet__name {
+            flex: 2;
+        }
+
+        .bet-pocket-bet__quantity {
+            text-align: center;
+        }
+        
+        .bet-pocket-bet__price {
+            text-align: right;
+        }
+
+        .bet-pocket-bet__delete {
+            width: 24px;
+            text-align: right;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+    }
+}

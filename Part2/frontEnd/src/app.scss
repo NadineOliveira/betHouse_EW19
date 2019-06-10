@@ -1,0 +1,27 @@
+@import '../node_modules/normalize.css/normalize.css';
+@import './assets/resets';
+@import './assets/colors';
+
+#root {
+    background-color: $white;
+}
+
+.header-container {
+    background: $brow-darker;
+    padding: 5px;
+    margin-bottom: 10px;
+
+    .navigation-container {
+        margin: auto;
+        max-width: 1200px;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+    }
+}
+
+.main-container {
+    margin: auto;
+    max-width: 1200px;
+    width: 100%;
+}

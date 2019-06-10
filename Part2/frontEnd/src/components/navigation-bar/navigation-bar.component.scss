@@ -1,0 +1,19 @@
+@import '../../assets/colors';
+
+.navigation-bar {
+    width: 100%;
+    display: flex;
+    overflow: auto;
+
+    .navigation-item {
+        padding: 30px 35px 10px 35px;
+        font-weight: bold;
+        text-transform: uppercase;
+        color: $brow-lighter;
+        
+        &.active {
+            color: $brow-light;
+            border-bottom: 2px solid $brow-light;
+        }
+    }
+}
