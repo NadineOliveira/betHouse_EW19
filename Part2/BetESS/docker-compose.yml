@@ -21,8 +21,9 @@ services:
     image: eventos
     volumes:
       - ./eventos/:/usr/src/app
+      - /usr/src/app/node_modules
     ports:
-      - 3001:3001
+      - 7001:7001
       - 9201:9201
     depends_on:
       - bd_eventos
@@ -48,8 +49,9 @@ services:
     image: apostas
     volumes:
       - ./apostas/:/usr/src/app
+      - /usr/src/app/node_modules
     ports:
-      - 3002:3002
+      - 7002:7002
       - 9202:9202
     depends_on:
       - bd_apostas
@@ -75,8 +77,9 @@ services:
     image: utilizadores
     volumes:
       - ./utilizadores/:/usr/src/app
+      - /usr/src/app/node_modules
     ports:
-      - 3003:3003
+      - 7003:7003
       - 9203:9203
     networks:
       - network_geral

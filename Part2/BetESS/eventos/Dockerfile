@@ -3,13 +3,13 @@ FROM node:carbon
 # Create app directory
 WORKDIR /usr/src/app
 
+COPY package*.json ./
+
+RUN npm install
+# If you are building your code for production
+# RUN npm ci --only=production
+
 # Bundle app source
 COPY . .
-
-# npm install
-RUN rm -rf node_modules && \
-    npm install --silent
-# Run npm install --global grpc --unsafe-perm
-
-EXPOSE 3001 9201
+EXPOSE 7001 9201
 CMD [ "npm", "run", "start" ]

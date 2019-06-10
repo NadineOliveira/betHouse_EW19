@@ -6,7 +6,6 @@ var logger = require('morgan');
 
 var mongoose = require('mongoose')
 
-var indexRouter = require('./routes/index');
 
 //ligação ao mongo
 
@@ -45,31 +44,16 @@ const trataPedido = (message) => {
   console.log("Eventos: Recebi pedido")
 };
 
-//
-// setInterval(function(){
-//   console.log('enviar para apostas');
-//   pub_socket.send(['apostas', 'meowApostas!']);
-//   console.log('enviar para utilizadores');
-//   pub_socket.send(['utilizadores', 'meowUtilizadores!']);
-// }, 1000);
 
 var app = express();
 
 
-
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
 
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
-app.use('/eventos', indexRouter);
-
-
 
 
 // catch 404 and forward to error handler
@@ -87,5 +71,11 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+
+// Rotas começam aqui
+app.get("/eventos", async (req, res) => {
+  res.send("Eventos recebeu pedido");
+})
 
 module.exports = app;
