@@ -5,12 +5,12 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
 var jwt = require("jsonwebtoken");
-
+var cors = require('cors')
 const User = require("./models/User");
 const key = require("./key");
 
 var app = express();
-
+app.use(cors())
 
 var mongoose = require('mongoose')
 

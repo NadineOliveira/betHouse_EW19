@@ -4,7 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var Eventos = require('./controllers/evento')
-
+var cors = require('cors')
 
 var mongoose = require('mongoose')
 
@@ -47,7 +47,7 @@ const trataPedido = (message) => {
 };
 
 var app = express();
-
+app.use(cors())
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
