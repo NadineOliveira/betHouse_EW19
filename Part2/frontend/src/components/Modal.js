@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import {Form,Field,formManager} from 'react-vio-form'
+import {registaAposta} from '../actions/apostas'
 
 
 export default class MyVerticallyCenteredModal extends React.Component {
@@ -11,8 +12,9 @@ export default class MyVerticallyCenteredModal extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
       }
-      handleSubmit(event) {
-        alert('Valor Apostado: '+ this.state.value);
+      handleSubmit(event,row,prog) {
+        alert('Valor Apostado: '+ this.state.value + JSON.stringify(row));
+        registaAposta(row,this.state.value,prog);
         event.preventDefault();
       }
       handleInputChange(e) {          
@@ -30,7 +32,7 @@ export default class MyVerticallyCenteredModal extends React.Component {
         >
           <Modal.Header closeButton>
             <Modal.Title id="contained-modal-title-vcenter">
-              Apostar: { `${JSON.stringify(this.props.equipa)}`}
+              Apostar: { `${JSON.stringify(this.props.equipa.split("-")[0])}`}
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
@@ -48,7 +50,7 @@ export default class MyVerticallyCenteredModal extends React.Component {
             </form>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="outline-dark" onClick={ this.handleSubmit }>Apostar</Button>
+            <Button variant="outline-dark" onClick={event=>this.handleSubmit(event,this.props.row,this.props.equipa) }>Apostar</Button>
             <Button variant="outline-dark" onClick={this.props.onHide}>Close</Button>
           </Modal.Footer>
         </Modal>

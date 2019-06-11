@@ -1,16 +1,24 @@
 import React, { Component } from 'react';
 import '../App.css';
+import Table from '../components/Table.js'
+import ReactCollapsingTable from 'react-collapsing-table'
+import ReactTable from 'react-table'
 import BootstrapTable from 'react-bootstrap-table-next';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
+import {ModalHeader, Title, Body, Footer} from "react-bootstrap/ModalHeader";
 import MyVerticallyCenteredModal from './Modal';
 
-/*
+
 var data = [
-  {id: 1, name: 'Gob', value: '2'},
-  {id: 2, name: 'Buster', value: '5'},
-  {id: 3, name: 'George Michael', value: '4'}
+    {id: 1, data:'2019-11-11', prognostico: 'Porto', valor: 3},
+    {id: 1, data:'2019-11-11', prognostico: 'Benfica', valor: 2},
+    {id: 1, data:'2019-11-11', prognostico: 'Braga', valor: 6}
 ];
+/*{id: 1, data:'2019-11-11', prognostico: 'Porto', valor: 3},
+  {id: 1, data:'2019-11-11', prognostico: 'Benfica', valor: 2},
+  {id: 1, data:'2019-11-11', prognostico: 'Braga', valor: 6},
 
 var rows = [
   { id: 1, firstName: 'Paul', lastName: 'Darragh', }
@@ -19,6 +27,7 @@ var columns = [
   { accessor: 'firstName', label: 'First Name', priorityLevel: 1, position: 1, minWidth: 150, },
   { accessor: 'lastName', label: 'Last Name', priorityLevel: 2, position: 2, minWidth: 150, },
 ]
+
 export default class Home extends Component {
   render() {
     return (
@@ -29,10 +38,9 @@ export default class Home extends Component {
     );
   }
 }
- 
-*/
+ */
 
-const products = [ {id:"1",data: '2019-12-12',equipa1:"Porto",equipa2:"Benfica",odd1:1.2,oddx:3,odd2:2}];
+const products = [ {id:"1",data: '2019-12-12T20:00',equipa1:"Porto",equipa2:"Benfica",odd1:1.2,oddx:3,odd2:2}];
 const columns = [{
   dataField: 'data',
   text: 'Data'
@@ -57,15 +65,13 @@ export default class Home extends React.Component {
   constructor(props) {
     super(props);
     this.state = {value: "", show: false,modalShow: false, token: localStorage.getItem('jwtToken')};
-    this.aposta = {data: "", valor: "", prognostico: "", evento: ""}
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleShow = this.handleShow.bind(this);
     this.handleClose = this.handleClose.bind(this);
   }
-  handleSubmit(row,event) {
-    alert('Equipa Selecionada: ' + JSON.stringify(row));
-
+  handleSubmit(event) {
+    //alert('Equipa Selecionada: ' + this.state.value);
     event.preventDefault();
     this.setState({ modalShow: true });
   }
@@ -96,16 +102,15 @@ export default class Home extends React.Component {
             Selecione a equipa: 
             <select value={this.state.value} onChange={this.handleChange}>
               <option value="" selected disabled hidden>Selecione</option>
-              <option value={`${row.equipa1}-1`}>{`${row.equipa1} `}</option>
-              <option value={`Empate-2`}>Empate</option>
-              <option value={`${row.equipa2}-3`}>{`${row.equipa2}`}</option>
+              <option value={`${row.equipa1}`}>{`${row.equipa1}`}</option>
+              <option value={`Empate`}>Empate</option>
+              <option value={`${row.equipa2}`}>{`${row.equipa2}`}</option>
             </select>
           </label>
-          <Button variant="outline-dark" onClick={event=>this.handleSubmit(row,event)}>Apostar</Button>
+          <Button variant="outline-dark" onClick={this.handleSubmit}>Apostar</Button>
           <MyVerticallyCenteredModal
             show={this.state.modalShow}
             equipa = {this.state.value}
-            row = {row}
             onHide={() => this.setState({ modalShow: false })}
           />
   
@@ -134,8 +139,8 @@ export default class Home extends React.Component {
       <div>
         <h1 class="text-center">BetESS</h1>
         <p>{this.state.token} </p>
-        {this.state.token  ? (<BootstrapTable keyField='id' data={ products } columns={ columns } expandRow={ expandRow }/>)
-          : (<BootstrapTable keyField='id' data={ products } columns={ columns } expandRow={ expandRow1 }/>)}
+        <p className="Table-header">Apostas</p>
+            <Table data={data}/>
       
       </div>
       
