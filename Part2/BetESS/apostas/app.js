@@ -3,6 +3,8 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var bodyParser = require('body-parser');
+var jwt = require("jsonwebtoken");
 var Aposta = require('./controllers/aposta')
 
 
@@ -35,10 +37,30 @@ sub_socket.connect(utilizadores_address);
 //Subscreve aquilo que é enviado para ele
 sub_socket.subscribe("apostas");
 
+// Formato das mensagens : [destino, origem resposta|pedido identificador cenasDependentes (saldo, retiraSaldo, ...)]
+const trataPedido = (topic, message) => { 
+  console.log("Apostas: Recebi pedido com topico " + topic.toString() + " e mensagem " + message.toString())
+  // Message indica qual o evento que devemos acordar
+  var msgString = message.toString().split(" ")
+  var type = msgString[1]
+  console.log("Type =", type)
 
-const trataPedido = (message) => {
-  console.log("Apostas: Recebi pedido")
+  if (type == "resposta") {
+    // utilizadores resposta id valor
+    var id = msgString[2]
+    sub_socket.emit(id, message)
+  }
+
+  else {
+    console.log("apostas nao sabe o que fazer com pedido")
+    console.log("Array: " + msgString)
+  }
+
+  
+
 };
+
+sub_socket.on("message", trataPedido);
 
 var app = express();
 
@@ -48,16 +70,79 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+//Middleware para verificação de existencia de header com jwt token
+app.use( function(req, res, next) {
+  try {
+  const token = req.headers.authorization.split(" ")[1]
+  console.log("Token = " + token)
+  jwt.verify(token, "EW2019", function (err, payload) {
+      console.log("Payload é " + JSON.stringify(payload))
+      if (payload) {
+          console.log("User existe, preencher req.user");
+                  req.user=payload
+                  next()
+      } else {
+         next()
+      }
+  })
+}catch(e){
+  next()
+}
+});
+
 // Rotas começam aqui
 app.post("/apostas", async (req,res) => {
   var data = req.body.data
   var valor = req.body.valor
   var prognostico = req.body.prognostico
   var evento = req.body.evento
-  //var user = req.user.email
-  Aposta.insert({data: data, valor: valor, prognostico: prognostico, recebido: 0, evento: evento})
-    .then(aposta => res.jsonp(aposta))
-    .catch(err => res.status(500).send(err))
+  var user = req.user.email
+  pub_socket.send(["utilizadores", "apostas saldo " + user])
+
+  //Envia ao micro servico de utilizadores apostas saldo user
+  // recebe utilizadores resposta nuno 12345
+  const respostaSaldo = (message) => {
+    console.log("Foi acordada a respostaSaldo, mensagem : " + message.toString())
+    var messageBody = message.toString().split(" ")
+    var type = messageBody[1]
+    if (type == "resposta") {
+
+      var saldo = parseFloat(messageBody[3])
+      console.log("Recebi valor " + saldo)
+
+      if (saldo > parseFloat(valor)) {
+        
+        pub_socket.send(["utilizadores", "apostas retiraSaldo " + user + " " + parseFloat(valor)])
+
+        const respostaRetiraSaldo = (message) => {
+          // recebe utilizadores resposta id ok
+          console.log("Foi acordada a respostaRetiraSaldo, mensagem : " + message.toString())
+          var msgBody = message.toString().split(" ")
+          var type = msgBody[1]
+          if (type == "resposta") {
+            var resposta = msgBody[3]
+
+            console.log("Recebi resposta à retirada de saldo " + resposta)
+            if (resposta == "ok") {
+              Aposta.insert({data: data, valor: valor, prognostico: prognostico, recebido: 0, evento: evento, user:user})
+              .then(aposta => res.jsonp(aposta))
+              .catch(err => res.status(500).send(err)) 
+            }
+          
+          }
+        
+        }
+        sub_socket.once(user, respostaRetiraSaldo)
+      }
+
+    }
+    else {
+      res.json({erro: "Saldo insuficiente"})
+    }
+  }
+
+  sub_socket.once(user, respostaSaldo)
+
 })
 
 app.get("/apostas", async (req,res) => {

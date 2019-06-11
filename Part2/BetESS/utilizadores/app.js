@@ -14,6 +14,8 @@ var app = express();
 
 var mongoose = require('mongoose')
 
+var controller = require("./controllers/User")
+
 
 //ligação ao mongo
 
@@ -46,19 +48,32 @@ sub_socket.on('message', function(topic, message) {
   trataPedido (message);
 });
 
-const trataPedido = (message) => {
-  console.log("Utilizadores : Recebi pedido : " + message );
-  console.log("Message: " + message);
+const trataPedido = async (message) => {
+  // Ja vem sem topico
+  // [destino, origem resposta|pedido identificador cenasDependentes]
+
+  console.log("Utilizadores : Tratar pedido : " + message );
   var messageSplit = message.toString().split(" ")
-  var sender = messageSplit [0] // Quem envia a mensagem e quer resposta
+  var sender = messageSplit[0]
+  console.log("Sender: " + sender)
+  var id = messageSplit[2]
   var pedido = messageSplit[1]
   switch (pedido) {
     case "saldo":
       // Assumir que vem id logo a seguir, do tipo saldo user@gmail.com
-      pub_socket.send([sender, "pediste saldo bro"]);
+      console.log("É saldo")
+      var objSaldo = await controller.getSaldo(id)
+      pub_socket.send([sender, "utilizadores resposta " + id + " " + objSaldo.saldo]);
+      console.log("Enviou saldo")
       break;
     case "retiraSaldo":
       // Assumir que vem id logo a seguir e quantia, do tipo retiraSaldo user@gmail.com 123
+      var valorGasto = parseFloat(messageSplit[3])
+      var done = controller.retiraSaldo(id,valorGasto )
+      if (done) {
+        pub_socket.send([sender, "utilizadores resposta " + id + " " + "ok"])
+        console.log("Saldo retirado")
+      }
 
       break;
     default:
@@ -105,14 +120,16 @@ app.use( function(req, res, next) {
 // Rotas começam aqui
 app.get("/utilizadores", async (req, res) => {
   console.log(req.user);
-  res.send("Utilizadores recebeu pedido");
+  controller.list().then(doc => {
+    res.jsonp(doc)
+  })
 });
 
 app.post('/login', function(req,res){
   user.findOne ({ email:req.body.email }).then((user)=>{
           User.comparePassword(req.body.password,(err, isMatch)=>{
               if(isMatch){
-                  var token = jwt.sign({ email : user.email, userId: user._id}, key.tokenKey);
+                  var token = jwt.sign({ email : user.email}, key.tokenKey);
                   res.status(200).json({
                       token
                   })
