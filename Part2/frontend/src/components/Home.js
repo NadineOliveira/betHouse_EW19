@@ -114,7 +114,7 @@ export default class Home extends React.Component {
     return (
       <div>
         <h1 class="text-center">BetESS</h1>
-        <p>`${this.state.token}`</p>
+        <p>{this.state.token} </p>
       <BootstrapTable keyField='id' data={ products } columns={ columns } expandRow={ expandRow }/>
       
       </div>

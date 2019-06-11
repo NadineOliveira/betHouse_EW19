@@ -49,3 +49,7 @@ module.exports.retiraSaldo = (email, valorGasto) => {
     .exec()
 }
 
+module.exports.inserir = (novo) => {
+    return User.create(novo)
+}
+

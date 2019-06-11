@@ -99,10 +99,10 @@ app.use( function(req, res, next) {
     jwt.verify(token, key.tokenKey, function (err, payload) {
         console.log(payload)
         if (payload) {
-            User.findById(payload.userId).then(
+            User.getUser(payload.email).then(
                 (doc)=>{
                   console.log("User existe, preencher req.user");
-                    req.user=doc;
+                    req.user = doc;
                     next()
                 }
             )
@@ -135,19 +135,20 @@ app.post('/utilizadores/login', async function(req,res){
   else res.status(400).send("Erro no Login")
 });
 
-app.post('/utilizadores', function(req,res){
+app.post('/utilizadores', async (req,res) => {
   var email = req.body.email;
   var password = req.body.password;
-  User.create({email: email, password: password, saldo : 0})
-    .then(user => {
-        var token = jwt.sign({ email : user.email, userId: user._id}, key.tokenKey);
-        res.status(200).json({ token });})
-    .catch(error => {
-      console.log("Erro : " + error);
-      res.json({erro : error});
-  });
+  var novoUser = await User.inserir({email: email, password: password, saldo : 0})
+  if (novoUser) {
+    var token = jwt.sign({ email : novoUser.email}, key.tokenKey);
+    res.status(200).json({ token });
+    }
+  else {
+    res.status(500).send("Erro no registo!")
+
+  }
   
-  
+
 });
 
 
