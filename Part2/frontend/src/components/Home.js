@@ -49,7 +49,13 @@ const columns = [{
   text: 'Equipa'
 }];
 
-
+function isLoggedIn() {
+  if (localStorage.getItem('jwtToken')){
+    return true
+  }
+  else
+  return false
+}
 
 
 export default class Home extends React.Component {
@@ -78,8 +84,40 @@ export default class Home extends React.Component {
   }
 
   render() {
+
+    const expandRow = {
     
-  const expandRow = {
+      renderer: row => (
+        
+          <div>
+          <p>{ `This Expand row is belong to rowKey ${row.data},${JSON.stringify(row)}` }</p>
+          <p><b>{`${row.equipa1}:`}</b>{` ${row.odd1}`}</p>
+          <p><b>{`Empate`}</b>{` ${row.odd1}`}</p>
+          <p><b>{`${row.equipa2}:`}</b>{` ${row.odd2}`}</p>
+          <form /*onSubmit={this.handleShow}*/>
+          <label>
+            Selecione a equipa: 
+            <select value={this.state.value} onChange={this.handleChange}>
+              <option value="" selected disabled hidden>Selecione</option>
+              <option value={`${row.equipa1}`}>{`${row.equipa1}`}</option>
+              <option value={`Empate`}>Empate</option>
+              <option value={`${row.equipa2}`}>{`${row.equipa2}`}</option>
+            </select>
+          </label>
+          <Button variant="outline-dark" onClick={this.handleSubmit}>Apostar</Button>
+          <MyVerticallyCenteredModal
+            show={this.state.modalShow}
+            equipa = {this.state.value}
+            onHide={() => this.setState({ modalShow: false })}
+          />
+  
+          </form>
+            
+        </div>
+      )
+    };
+    
+  const expandRow1 = {
     
     renderer: row => (
       
@@ -88,24 +126,7 @@ export default class Home extends React.Component {
         <p><b>{`${row.equipa1}:`}</b>{` ${row.odd1}`}</p>
         <p><b>{`Empate`}</b>{` ${row.odd1}`}</p>
         <p><b>{`${row.equipa2}:`}</b>{` ${row.odd2}`}</p>
-        <form /*onSubmit={this.handleShow}*/>
-        <label>
-          Selecione a equipa: 
-          <select value={this.state.value} onChange={this.handleChange}>
-            <option value="" selected disabled hidden>Selecione</option>
-            <option value={`${row.equipa1}`}>{`${row.equipa1}`}</option>
-            <option value={`Empate`}>Empate</option>
-            <option value={`${row.equipa2}`}>{`${row.equipa2}`}</option>
-          </select>
-        </label>
-        <Button variant="outline-dark" onClick={this.handleSubmit}>Apostar</Button>
-        <MyVerticallyCenteredModal
-          show={this.state.modalShow}
-          equipa = {this.state.value}
-          onHide={() => this.setState({ modalShow: false })}
-        />
 
-        </form>
           
       </div>
     )
@@ -115,7 +136,8 @@ export default class Home extends React.Component {
       <div>
         <h1 class="text-center">BetESS</h1>
         <p>{this.state.token} </p>
-      <BootstrapTable keyField='id' data={ products } columns={ columns } expandRow={ expandRow }/>
+        {this.state.token  ? (<BootstrapTable keyField='id' data={ products } columns={ columns } expandRow={ expandRow }/>)
+          : (<BootstrapTable keyField='id' data={ products } columns={ columns } expandRow={ expandRow1 }/>)}
       
       </div>
       
