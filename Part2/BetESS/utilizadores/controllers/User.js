@@ -1,4 +1,5 @@
 var User = require('../models/User')
+var bcrypt = require('bcrypt')
 
 // Lista de utilizadores
 module.exports.list = () => {
@@ -8,6 +9,30 @@ module.exports.list = () => {
         .exec()
 }
 
+module.exports.getUser = (email) => {
+    return User 
+        .findOne({email: email})
+        .exec()
+}
+
+module.exports.comparePass = async (pass, hash) => {
+    bcrypt.compare(pass, hash, function(err, res) {
+        return res
+    });
+}
+
+module.exports.validatePassword = async (email, password) => {
+    user = await this.getUser(email)
+    if(!user) 
+        throw new Error("Utilizador não encontrado!")
+
+    var compare = await user.isValidPassword(password)
+
+    if(!compare)
+        throw new Error ("Invalid password")
+
+    return user
+}
 
 
 // Devolve o saldo dado um email
@@ -23,3 +48,4 @@ module.exports.retiraSaldo = (email, valorGasto) => {
     .findOneAndUpdate({email: email},{$inc: {saldo: -valorGasto}})
     .exec()
 }
+

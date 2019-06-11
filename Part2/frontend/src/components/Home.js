@@ -55,7 +55,7 @@ const columns = [{
 export default class Home extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {value: "", show: false,modalShow: false};
+    this.state = {value: "", show: false,modalShow: false, token: localStorage.getItem('jwtToken')};
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleShow = this.handleShow.bind(this);
@@ -89,31 +89,32 @@ export default class Home extends React.Component {
         <p><b>{`Empate`}</b>{` ${row.odd1}`}</p>
         <p><b>{`${row.equipa2}:`}</b>{` ${row.odd2}`}</p>
         <form /*onSubmit={this.handleShow}*/>
-          <label>
-            Selecione a equipa: 
-            <select value={this.state.value} onChange={this.handleChange}>
-              <option value="" selected disabled hidden>Selecione</option>
-              <option value={`${row.equipa1}`}>{`${row.equipa1}`}</option>
-              <option value={`Empate`}>Empate</option>
-              <option value={`${row.equipa2}`}>{`${row.equipa2}`}</option>
-            </select>
-          </label>
+        <label>
+          Selecione a equipa: 
+          <select value={this.state.value} onChange={this.handleChange}>
+            <option value="" selected disabled hidden>Selecione</option>
+            <option value={`${row.equipa1}`}>{`${row.equipa1}`}</option>
+            <option value={`Empate`}>Empate</option>
+            <option value={`${row.equipa2}`}>{`${row.equipa2}`}</option>
+          </select>
+        </label>
+        <Button variant="outline-dark" onClick={this.handleSubmit}>Apostar</Button>
+        <MyVerticallyCenteredModal
+          show={this.state.modalShow}
+          equipa = {this.state.value}
+          onHide={() => this.setState({ modalShow: false })}
+        />
 
-          <Button variant="outline-dark" onClick={this.handleSubmit}>Apostar</Button>
+        </form>
           
-          <MyVerticallyCenteredModal
-            show={this.state.modalShow}
-            equipa = {this.state.value}
-            onHide={() => this.setState({ modalShow: false })}
-          />
-
-          </form>
       </div>
     )
   };
+
     return (
       <div>
         <h1 class="text-center">BetESS</h1>
+        <p>`${this.state.token}`</p>
       <BootstrapTable keyField='id' data={ products } columns={ columns } expandRow={ expandRow }/>
       
       </div>

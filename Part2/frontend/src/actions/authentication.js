@@ -15,14 +15,15 @@ export const registerUser = (user, history) => dispatch => {
             });
 }
 
-export const loginUser = (user) => dispatch => {
-    axios.post('/api/users/login', user)
+export const loginUser = (user, history) => dispatch => {
+    axios.post('http://localhost/utilizadores/login', user)
             .then(res => {
                 const { token } = res.data;
                 localStorage.setItem('jwtToken', token);
                 setAuthToken(token);
                 const decoded = jwt_decode(token);
                 dispatch(setCurrentUser(decoded));
+                history.push('/')
             })
             .catch(err => {
                 dispatch({

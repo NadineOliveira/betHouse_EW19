@@ -5,16 +5,15 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
 var jwt = require("jsonwebtoken");
-var cors = require('cors')
-const User = require("./models/User");
 const key = require("./key");
+
+var cors = require('cors')
 
 var app = express();
 app.use(cors())
-
 var mongoose = require('mongoose')
 
-var controller = require("./controllers/User")
+var User = require("./controllers/User")
 
 
 //ligação ao mongo
@@ -62,14 +61,14 @@ const trataPedido = async (message) => {
     case "saldo":
       // Assumir que vem id logo a seguir, do tipo saldo user@gmail.com
       console.log("É saldo")
-      var objSaldo = await controller.getSaldo(id)
+      var objSaldo = await User.getSaldo(id)
       pub_socket.send([sender, "utilizadores resposta " + id + " " + objSaldo.saldo]);
       console.log("Enviou saldo")
       break;
     case "retiraSaldo":
       // Assumir que vem id logo a seguir e quantia, do tipo retiraSaldo user@gmail.com 123
       var valorGasto = parseFloat(messageSplit[3])
-      var done = controller.retiraSaldo(id,valorGasto )
+      var done = User.retiraSaldo(id,valorGasto )
       if (done) {
         pub_socket.send([sender, "utilizadores resposta " + id + " " + "ok"])
         console.log("Saldo retirado")
@@ -119,28 +118,21 @@ app.use( function(req, res, next) {
 
 // Rotas começam aqui
 app.get("/utilizadores", async (req, res) => {
-  console.log(req.user);
-  controller.list().then(doc => {
+  User.list().then(doc => {
     res.jsonp(doc)
   })
 });
 
-app.post('/utilizadores/login', function(req,res){
-  user.findOne ({ email:req.body.email }).then((user)=>{
-          User.comparePassword(req.body.password,(err, isMatch)=>{
-              if(isMatch){
-                  var token = jwt.sign({ email : user.email}, key.tokenKey);
-                  res.status(200).json({
-                      token
-                  })
-              }
-              else{
-                  res.status(400).json({message:'Invalid Password/email'});
-              }
-          })
-  }).catch((err)=>{
-      res.status(400).json({message:'Invalid Password/email'});
-  })
+app.post('/utilizadores/login', async function(req,res){
+  var email = req.body.email
+  var password = req.body.password
+  var user = await User.validatePassword(email, password)
+
+  if(user){
+      var token = jwt.sign({ email : user.email}, key.tokenKey);
+      res.jsonp({ token })
+  } 
+  else res.status(400).send("Erro no Login")
 });
 
 app.post('/utilizadores', function(req,res){

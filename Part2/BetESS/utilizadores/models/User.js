@@ -19,10 +19,10 @@ UserSchema.pre('save', function (next) {
     next(err)
 })
 
-UserSchema.methods.comparePassword = function(candidatePassword, next){    
-    bcrypt.compare(candidatePassword, this.password, function (err, isMatch){
-        if(err) return next(err);
-        next(null,isMatch)
-    })
+UserSchema.methods.isValidPassword = async function(password) {
+    var user = this
+    var compare = await bcrypt.compare(password, user.password)
+    return compare
 }
+
 module.exports = mongoose.model("User", UserSchema, "utilizadores");
