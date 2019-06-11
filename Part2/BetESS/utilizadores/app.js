@@ -125,7 +125,7 @@ app.get("/utilizadores", async (req, res) => {
   })
 });
 
-app.post('/login', function(req,res){
+app.post('/utilizadores/login', function(req,res){
   user.findOne ({ email:req.body.email }).then((user)=>{
           User.comparePassword(req.body.password,(err, isMatch)=>{
               if(isMatch){
@@ -143,7 +143,7 @@ app.post('/login', function(req,res){
   })
 });
 
-app.post('/register', function(req,res){
+app.post('/utilizadores', function(req,res){
   var email = req.body.email;
   var password = req.body.password;
   User.create({email: email, password: password, saldo : 0})
