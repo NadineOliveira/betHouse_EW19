@@ -126,6 +126,7 @@ app.post("/apostas", async (req,res) => {
 
             console.log("Recebi resposta à retirada de saldo " + resposta)
             if (resposta == "ok") {
+              console.dir({data: data, valor: valor, prognostico: prognostico, recebido: 0, evento: evento, user:user})
               Aposta.insert({data: data, valor: valor, prognostico: prognostico, recebido: 0, evento: evento, user:user})
               .then(aposta => res.jsonp(aposta))
               .catch(err => res.status(500).send(err)) 

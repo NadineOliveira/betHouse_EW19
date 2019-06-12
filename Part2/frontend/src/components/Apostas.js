@@ -1,14 +1,8 @@
 import React, { Component } from 'react';
 import '../App.css';
 import Table from '../components/Table.js'
-import ReactCollapsingTable from 'react-collapsing-table'
-import ReactTable from 'react-table'
-import BootstrapTable from 'react-bootstrap-table-next';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
-import {ModalHeader, Title, Body, Footer} from "react-bootstrap/ModalHeader";
-import MyVerticallyCenteredModal from './Modal';
+import axios from 'axios';
 
 
 var data = [
@@ -64,83 +58,22 @@ function isLoggedIn() {
 export default class Home extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {value: "", show: false,modalShow: false, token: localStorage.getItem('jwtToken')};
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-    this.handleShow = this.handleShow.bind(this);
-    this.handleClose = this.handleClose.bind(this);
-  }
-  handleSubmit(event) {
-    //alert('Equipa Selecionada: ' + this.state.value);
-    event.preventDefault();
-    this.setState({ modalShow: true });
-  }
-  handleChange(event) {
-    this.setState({value: event.target.value});
-  }
-  handleClose() {
-    this.setState({ show: false });
-  }
-
-  handleShow() {
-    this.setState({ show: true });
+    this.state = {value: "", 
+                  token: localStorage.getItem('jwtToken'),
+                  apostas: []
+                };
+    axios.get('http://localhost/apostas').then(response => {
+      this.setState({apostas: response.data})
+    })
   }
 
   render() {
 
-    const expandRow = {
-    
-      renderer: row => (
-        
-          <div>
-          <p>{ `This Expand row is belong to rowKey ${row.data},${JSON.stringify(row)}` }</p>
-          <p><b>{`${row.equipa1}:`}</b>{` ${row.odd1}`}</p>
-          <p><b>{`Empate`}</b>{` ${row.odd1}`}</p>
-          <p><b>{`${row.equipa2}:`}</b>{` ${row.odd2}`}</p>
-          <form /*onSubmit={this.handleShow}*/>
-          <label>
-            Selecione a equipa: 
-            <select value={this.state.value} onChange={this.handleChange}>
-              <option value="" selected disabled hidden>Selecione</option>
-              <option value={`${row.equipa1}`}>{`${row.equipa1}`}</option>
-              <option value={`Empate`}>Empate</option>
-              <option value={`${row.equipa2}`}>{`${row.equipa2}`}</option>
-            </select>
-          </label>
-          <Button variant="outline-dark" onClick={this.handleSubmit}>Apostar</Button>
-          <MyVerticallyCenteredModal
-            show={this.state.modalShow}
-            equipa = {this.state.value}
-            onHide={() => this.setState({ modalShow: false })}
-          />
-  
-          </form>
-            
-        </div>
-      )
-    };
-    
-  const expandRow1 = {
-    
-    renderer: row => (
-      
-        <div>
-        <p>{ `This Expand row is belong to rowKey ${row.data},${JSON.stringify(row)}` }</p>
-        <p><b>{`${row.equipa1}:`}</b>{` ${row.odd1}`}</p>
-        <p><b>{`Empate`}</b>{` ${row.odd1}`}</p>
-        <p><b>{`${row.equipa2}:`}</b>{` ${row.odd2}`}</p>
-
-          
-      </div>
-    )
-  };
-
     return (
       <div>
-        <h1 class="text-center">BetESS</h1>
-        <p>{this.state.token} </p>
-        <p className="Table-header">Apostas</p>
-            <Table data={data}/>
+        <h1 class="text-center">Apostas</h1>
+        <p className="Table-header"></p>
+            <Table data={this.state.apostas}/>
       
       </div>
       

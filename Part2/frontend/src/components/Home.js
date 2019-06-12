@@ -3,7 +3,7 @@ import '../App.css';
 import BootstrapTable from 'react-bootstrap-table-next';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import Button from 'react-bootstrap/Button';
-import MyVerticallyCenteredModal from './Modal';
+import MyVerticallyCenteredModal from './ModalAposta';
 import {getEventos} from '../actions/eventos'
 import axios from 'axios';
 
@@ -35,7 +35,7 @@ export default class Home extends Component {
 */
 const products = [];
 
-//const products = [ {id:"5d0045df5355770012aabd12",data: '2019-12-12',equipa1:"Porto",equipa2:"Benfica",odd1:1.2,oddx:3,odd2:2}];
+//const products = [ {_id:"5d0045df5355770012aabd12",data: '2019-12-12',equipa1:"Porto",equipa2:"Benfica",odd1:1.2,oddx:3,odd2:2}];
 const columns = [{
   dataField: 'data',
   text: 'Data'
@@ -77,6 +77,13 @@ export default class Home extends React.Component {
   }
   handleSubmit(row,event) {
     //alert('Equipa Selecionada: ' + JSON.stringify(row));
+    event.preventDefault();
+    this.setState({ modalShow: true });
+  }
+  handleEncerrar(row,event) {
+    //alert('Equipa Selecionada: ' + JSON.stringify(row));
+    //encerrarEvento
+    alert("Encerra evento "+ JSON.stringify(row._id))
     event.preventDefault();
     this.setState({ modalShow: true });
   }
@@ -141,11 +148,38 @@ export default class Home extends React.Component {
     )
   };
 
+  const expandRowAdmin = {
+    
+    renderer: row => (
+      
+        <div>
+        <p>{ `This Expand row is belong to rowKey ${row.data},${JSON.stringify(row)}` }</p>
+        <p><b>{`${row.equipa1}:`}</b>{` ${row.odd1}`}</p>
+        <p><b>{`Empate`}</b>{` ${row.odd1}`}</p>
+        <p><b>{`${row.equipa2}:`}</b>{` ${row.odd2}`}</p>
+        <form /*onSubmit={this.handleShow}*/>
+        <label>
+          Selecione a equipa: 
+          <select value={this.state.value} onChange={this.handleChange}>
+            <option value="" selected disabled hidden>Resultado</option>
+            <option value={`${row.equipa1}-1`}>{`${row.equipa1} `}</option>
+            <option value={`Empate-2`}>Empate</option>
+            <option value={`${row.equipa2}-3`}>{`${row.equipa2}`}</option>
+          </select>
+        </label>
+        <Button variant="outline-dark" onClick={event=>this.handleEncerrar(row,event)}>Fechar</Button>
+
+        </form>
+          
+      </div>
+    )
+  };
+
     return (
       <div>
         <h1 class="text-center">BetESS </h1>
         <p>{this.state.token} </p>
-        {this.state.token  ? (<BootstrapTable keyField='id' data={ this.state.products } columns={ columns } expandRow={ expandRow }/>)
+        {this.state.token  ? (<BootstrapTable keyField='id' data={ this.state.products } columns={ columns } expandRow={ expandRowAdmin }/>)
           : (<BootstrapTable keyField='id' data={ this.state.products } columns={ columns } expandRow={ expandRow1 }/>)}
       
       </div>
