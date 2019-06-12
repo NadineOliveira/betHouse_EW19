@@ -1,10 +1,11 @@
 import axios from 'axios';
 
-export const getEventos = () => dispatch => {
+export const getEventos = async () => dispatch => {
     axios.get('http://localhost/eventos')
-            .then(res => res
-            )
+            .then(res => {
+                return res.data;
+            })
             .catch(err => {
-                alert("Erro a obter eventos" + err);
-                });
+                return [];
+            });
 }

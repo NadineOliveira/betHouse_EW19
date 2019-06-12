@@ -15,8 +15,8 @@ class MyVerticallyCenteredModal extends React.Component {
       }
       handleSubmit(event,row,prog) {
         //alert('Valor Apostado: '+ this.state.value + JSON.stringify(row));
-        this.props.registaAposta(row,this.state.value,prog,this.props.history);
-        event.preventDefault();
+        this.props.registaAposta(row,this.state.value,prog)
+        event.preventDefault()
       }
       handleInputChange(e) {          
         this.setState({
@@ -51,7 +51,7 @@ class MyVerticallyCenteredModal extends React.Component {
             </form>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="outline-dark" onClick={event=>this.handleSubmit(event,this.props.row,this.props.equipa) }>Apostar</Button>
+            <Button variant="outline-dark" onClick={event=>this.handleSubmit(event,this.props.row,this.props.equipa)}>Apostar</Button>
             <Button variant="outline-dark" onClick={this.props.onHide}>Close</Button>
           </Modal.Footer>
         </Modal>
