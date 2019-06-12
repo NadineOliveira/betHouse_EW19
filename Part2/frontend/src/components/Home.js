@@ -4,6 +4,7 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import Button from 'react-bootstrap/Button';
 import MyVerticallyCenteredModal from './Modal';
+import {getEventos} from '../actions/eventos'
 
 /*
 var data = [
@@ -31,8 +32,9 @@ export default class Home extends Component {
 }
  
 */
+const eventos =  getEventos();
 
-const products = [ {id:"1",data: '2019-12-12',equipa1:"Porto",equipa2:"Benfica",odd1:1.2,oddx:3,odd2:2}];
+const products = [ {id:"5d0045df5355770012aabd12",data: '2019-12-12',equipa1:"Porto",equipa2:"Benfica",odd1:1.2,oddx:3,odd2:2}];
 const columns = [{
   dataField: 'data',
   text: 'Data'
@@ -64,7 +66,7 @@ export default class Home extends React.Component {
     this.handleClose = this.handleClose.bind(this);
   }
   handleSubmit(row,event) {
-    alert('Equipa Selecionada: ' + JSON.stringify(row));
+    //alert('Equipa Selecionada: ' + JSON.stringify(row));
 
     event.preventDefault();
     this.setState({ modalShow: true });
@@ -132,8 +134,9 @@ export default class Home extends React.Component {
 
     return (
       <div>
-        <h1 class="text-center">BetESS</h1>
+        <h1 class="text-center">BetESS </h1>
         <p>{this.state.token} </p>
+        <p>{JSON.stringify(eventos)}</p>
         {this.state.token  ? (<BootstrapTable keyField='id' data={ products } columns={ columns } expandRow={ expandRow }/>)
           : (<BootstrapTable keyField='id' data={ products } columns={ columns } expandRow={ expandRow1 }/>)}
       

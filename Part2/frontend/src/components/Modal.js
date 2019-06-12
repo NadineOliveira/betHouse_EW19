@@ -3,9 +3,10 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import {Form,Field,formManager} from 'react-vio-form'
 import {registaAposta} from '../actions/apostas'
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
-
-export default class MyVerticallyCenteredModal extends React.Component {
+class MyVerticallyCenteredModal extends React.Component {
     constructor(props) {
         super(...props);
         this.state = {value: ''};
@@ -13,8 +14,8 @@ export default class MyVerticallyCenteredModal extends React.Component {
         this.handleInputChange = this.handleInputChange.bind(this);
       }
       handleSubmit(event,row,prog) {
-        alert('Valor Apostado: '+ this.state.value + JSON.stringify(row));
-        registaAposta(row,this.state.value,prog);
+        //alert('Valor Apostado: '+ this.state.value + JSON.stringify(row));
+        this.props.registaAposta(row,this.state.value,prog,this.props.history);
         event.preventDefault();
       }
       handleInputChange(e) {          
@@ -58,3 +59,16 @@ export default class MyVerticallyCenteredModal extends React.Component {
     }
   }
   
+MyVerticallyCenteredModal.propTypes = {
+    registaAposta: PropTypes.func.isRequired,
+    auth: PropTypes.object.isRequired,
+    errors: PropTypes.object.isRequired
+}
+
+
+const mapStateToProps = (state) => ({
+  auth: state.auth,
+  errors: state.errors
+})
+
+export  default connect(mapStateToProps, { registaAposta })(MyVerticallyCenteredModal)
