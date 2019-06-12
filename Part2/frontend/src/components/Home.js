@@ -6,7 +6,7 @@ import Button from 'react-bootstrap/Button';
 import MyVerticallyCenteredModal from './ModalAposta';
 import {getEventos} from '../actions/eventos'
 import axios from 'axios';
-
+import paginationFactory from 'react-bootstrap-table2-paginator';
 /*
 var data = [
   {id: 1, name: 'Gob', value: '2'},
@@ -38,13 +38,17 @@ const products = [];
 //const products = [ {_id:"5d0045df5355770012aabd12",data: '2019-12-12',equipa1:"Porto",equipa2:"Benfica",odd1:1.2,oddx:3,odd2:2}];
 const columns = [{
   dataField: 'data',
-  text: 'Data'
+  text: 'Data',
+  headerStyle: { backgroundColor: 'gray' },
+  
 }, {
   dataField: 'equipa1',
-  text: 'Equipa'
+  text: 'Equipa',
+  headerStyle: { backgroundColor: 'gray' }
 }, {
   dataField: 'equipa2',
-  text: 'Equipa'
+  text: 'Equipa',
+  headerStyle: { backgroundColor: 'gray' }
 }];
 
 function isLoggedIn() {
@@ -175,12 +179,35 @@ export default class Home extends React.Component {
     )
   };
 
+  
+const pageButtonRenderer = ({
+  page,
+  active,
+  disable,
+  title,
+  onPageChange
+}) => {
+  const activeStyle = {};
+  
+    activeStyle.backgroundColor = 'black';
+    activeStyle.color = 'black';
+  return (
+    <li className="page-item">
+      <a href="#" style={ activeStyle }>{ page }</a>
+    </li>
+  );
+};
+const options = {
+  pageButtonRenderer
+};
     return (
-      <div>
+      <div class="w-auto p-3" >
         <h1 class="text-center">BetESS </h1>
         <p>{this.state.token} </p>
-        {this.state.token  ? (<BootstrapTable keyField='id' data={ this.state.products } columns={ columns } expandRow={ expandRowAdmin }/>)
-          : (<BootstrapTable keyField='id' data={ this.state.products } columns={ columns } expandRow={ expandRow1 }/>)}
+        {this.state.token  ? (<BootstrapTable keyField='id' data={ this.state.products } columns={ columns } expandRow={ expandRowAdmin }
+                              pagination={ paginationFactory(options) }/>)
+          : (<BootstrapTable keyField='id' data={ this.state.products } columns={ columns } expandRow={ expandRow1 }
+          pagination={ paginationFactory(options) }/>)}
       
       </div>
       
