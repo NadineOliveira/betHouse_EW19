@@ -42,8 +42,30 @@ sub_socket.on('message', function(topic, message) {
   trataPedido (message);
 });
 
-const trataPedido = (message) => {
-  console.log("Eventos: Recebi pedido")
+const trataPedido = async (message) => {
+
+
+  var msgString = message.toString().split(" ")
+  var type = msgString[1]
+  console.log("Type =", type)
+
+  switch (type) {
+
+    case "eventoFechouResposta":
+        // Message indica qual o evento que devemos acordar
+        // apostas eventoFechouResposta idEvento ok
+      var id = msgString[2]
+      sub_socket.emit(id, message)
+      
+      break;
+
+
+  
+    default:
+      console.log("Não sei o que fazer com message " + message)
+
+      break;
+  }
 };
 
 var app = express();
@@ -53,6 +75,26 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+//Middleware para verificação de existencia de header com jwt token
+app.use( function(req, res, next) {
+  try {
+  const token = req.headers.authorization.split(" ")[1]
+  jwt.verify(token, "EW2019", function (err, payload) {
+      console.log(payload)
+      if (payload) {
+        req.user = payload;
+        next()
+
+      } else {
+         next()
+      }
+  })
+}catch(e){
+  next()
+}
+});
+
 
 // Rotas começam aqui
 app.post("/eventos", async (req,res) => {
@@ -97,10 +139,47 @@ app.get("/eventos/data/:data", async (req,res) => {
       .catch(err => res.status(500).send(err))     
 })
 
-app.get("/eventos/concluir/:id", async (req,res) => {
-  Eventos.finishEvent(req.params.id)
-      .then(evento => res.jsonp(evento))
-      .catch(err => res.status(500).send(err))     
+app.get("/eventos/concluir/:id/:result", async (req,res) => {
+  var idEvento = req.params.id
+  var result = req.params.result
+
+  var evento = await Eventos.getById(idEvento)
+  var oddVencedora = 0
+
+  switch (result) {
+    case "1":
+      oddVencedora = evento.odd1
+
+    break;
+
+    case "2":
+      oddVencedora = evento.odd2
+      
+    break;
+
+    case "3":
+      oddVencedora = evento.oddx
+      
+    break;
+  }
+    
+  // Notificar apostas que o evento com id ID terminou e enviar resultado e odd do resultado, para fazer contas nas apostas
+  pub_socket.send(["apostas", "eventos eventoFechou " + idEvento + " " + result + " " + oddVencedora ])
+
+  const respostaFecharEvento = (message) => {
+    // Recebi resposta, verificar se é ok
+    // "apostas eventoFechouResposta " + idEvento + " ok"
+      var msg = message.toString().split(" ")
+      var feedback = msg[3]
+
+      if (feedback == "ok") {
+        Eventos.finishEvent(idEvento, result)
+          .then(evento => res.jsonp(evento))
+          .catch(err => res.status(500).send(err))
+      }
+  }
+
+      sub_socket.once(idEvento, respostaFecharEvento)
 })
 
 // catch 404 and forward to error handler

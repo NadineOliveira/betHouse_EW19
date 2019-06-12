@@ -6,7 +6,7 @@ var EventoSchema = new Schema({
     oddx: {type: Number, required: true},
     odd2: {type: Number, required: true},
     data: {type: String, required: true},
-    estado: {type: Number, required: true},
+    estado: {type: Number, required: true}, //1 - equipa 1, 2 - equipa 2, 3 - empate, 0 - nao acabou
     equipa1: {type: String, required : true},
     equipa2: {type: String, required : true},
 })
