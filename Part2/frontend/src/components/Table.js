@@ -11,14 +11,17 @@ class Table1 extends Component {
     return (
       <div>
         <BootstrapTable data={this.props.data}>
-          <TableHeaderColumn isKey dataField='hora'>
-            Hora
+          <TableHeaderColumn isKey dataField='id'>
+            ID
           </TableHeaderColumn>
-          <TableHeaderColumn dataField='name'>
-            Name
+          <TableHeaderColumn dataField='data'>
+            Data
           </TableHeaderColumn>
-          <TableHeaderColumn dataField='value'>
-            Value
+          <TableHeaderColumn dataField='prognostico'>
+            Prognostico
+          </TableHeaderColumn>
+          <TableHeaderColumn dataField='valor'>
+            valor
           </TableHeaderColumn>
         </BootstrapTable>
       </div>

@@ -79,20 +79,23 @@ app.use(express.static(path.join(__dirname, 'public')));
 //Middleware para verificação de existencia de header com jwt token
 app.use( function(req, res, next) {
   try {
-  const token = req.headers.authorization.split(" ")[1]
-  jwt.verify(token, "EW2019", function (err, payload) {
-      console.log(payload)
-      if (payload) {
-        req.user = payload;
-        next()
+    console.dir(req.headers)
+    const token = req.headers.authorization
+    console.log("Token = " + token)
+    jwt.verify(token, "EW2019", function (err, payload) {
+        console.log(payload)
+        if (payload) {
+          req.user = payload;
+          next()
 
-      } else {
-         next()
-      }
-  })
-}catch(e){
-  next()
-}
+        } else {
+          next()
+        }
+    })
+  }
+  catch(e){
+    next()
+  }
 });
 
 

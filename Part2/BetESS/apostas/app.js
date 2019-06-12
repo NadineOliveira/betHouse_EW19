@@ -111,7 +111,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 //Middleware para verificação de existencia de header com jwt token
 app.use( function(req, res, next) {
   try {
-  const token = req.headers.authorization.split(" ")[1]
+    console.dir(req.headers)
+  const token = req.headers.authorization
+  console.log("Token = " + token)
   jwt.verify(token, "EW2019", function (err, payload) {
       console.log(payload)
       if (payload) {
@@ -148,7 +150,7 @@ app.post("/apostas", async (req,res) => {
       var saldo = parseFloat(messageBody[3])
       console.log("Recebi valor " + saldo)
 
-      if (saldo > parseFloat(valor)) {
+      if (saldo >= parseFloat(valor)) {
         
         pub_socket.send(["utilizadores", "apostas retiraSaldo " + user + " " + parseFloat(valor)])
 
