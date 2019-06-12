@@ -49,15 +49,20 @@ sub_socket.on('message', function(topic, message) {
 
 const trataPedido = async (message) => {
   // Ja vem sem topico
-  // [destino, origem resposta|pedido identificador cenasDependentes]
+  // [origem resposta|pedido identificador cenasDependentes]
 
   console.log("Utilizadores : Tratar pedido : " + message );
+
   var messageSplit = message.toString().split(" ")
+
   var sender = messageSplit[0]
+
   console.log("Sender: " + sender)
   var id = messageSplit[2]
   var pedido = messageSplit[1]
+
   switch (pedido) {
+
     case "saldo":
       // Assumir que vem id logo a seguir, do tipo saldo user@gmail.com
       console.log("É saldo")
@@ -65,7 +70,9 @@ const trataPedido = async (message) => {
       pub_socket.send([sender, "utilizadores resposta " + id + " " + objSaldo.saldo]);
       console.log("Enviou saldo")
       break;
+
     case "retiraSaldo":
+      console.log("É retira Saldo")
       // Assumir que vem id logo a seguir e quantia, do tipo retiraSaldo user@gmail.com 123
       var valorGasto = parseFloat(messageSplit[3])
       var done = User.retiraSaldo(id,valorGasto )
@@ -73,8 +80,18 @@ const trataPedido = async (message) => {
         pub_socket.send([sender, "utilizadores resposta " + id + " " + "ok"])
         console.log("Saldo retirado")
       }
-
       break;
+
+    case "aumentaSaldo":
+      // Assumir que vem id logo a seguir e quantia, do tipo aumentaSaldo user@gmail.com 123
+      var valor = parseFloat(messageSplit[3])
+      var done = User.aumentaSaldo(id, valor)
+      if (done) {
+        pub_socket.send([sender, "utilizadores resposta " + id + " " + "ok"])
+        console.log("Saldo adicionado")
+      }
+      break;
+
     default:
       break;
   }
@@ -94,25 +111,24 @@ app.use(bodyParser.urlencoded({
 
 //Middleware para verificação de existencia de header com jwt token
 app.use( function(req, res, next) {
-    try {
+  try {
+    console.dir(req.headers)
     const token = req.headers.authorization
-    jwt.verify(token, key.tokenKey, function (err, payload) {
+    console.log("Token = " + token)
+    jwt.verify(token, "EW2019", function (err, payload) {
         console.log(payload)
         if (payload) {
-            User.getUser(payload.email).then(
-                (doc)=>{
-                  console.log("User existe, preencher req.user");
-                    req.user = doc;
-                    next()
-                }
-            )
+          req.user = payload;
+          next()
+
         } else {
-           next()
+          next()
         }
     })
-}catch(e){
+  }
+  catch(e){
     next()
-}
+  }
 });
 
 
@@ -121,6 +137,14 @@ app.get("/utilizadores", async (req, res) => {
   User.list().then(doc => {
     res.jsonp(doc)
   })
+});
+
+// Aumentar saldo
+app.get("/utilizadores/aumentaSaldo/:email/:valor", async (req, res) => {
+  var email = req.params.email
+  var valor = req.params.valor
+  var novoUser = await User.aumentaSaldo(email, valor)
+  res.jsonp (novoUser)
 });
 
 app.post('/utilizadores/login', async function(req,res){

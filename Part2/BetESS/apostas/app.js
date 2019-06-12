@@ -37,30 +37,67 @@ sub_socket.connect(utilizadores_address);
 //Subscreve aquilo que é enviado para ele
 sub_socket.subscribe("apostas");
 
-// Formato das mensagens : [destino, origem resposta|pedido identificador cenasDependentes (saldo, retiraSaldo, ...)]
-const trataPedido = (topic, message) => { 
-  console.log("Apostas: Recebi pedido com topico " + topic.toString() + " e mensagem " + message.toString())
-  // Message indica qual o evento que devemos acordar
+sub_socket.on("message", (topic, message) => {
+  console.log("Apostas recebeu mensagem com topico " + topic.toString() + " e mensagem " + message.toString())
+  trataPedido(message)
+});
+
+// Formato das mensagens : [origem resposta|pedido identificador cenasDependentes (saldo, retiraSaldo, ...)]
+
+const trataPedido = async (message) => {
+
+
   var msgString = message.toString().split(" ")
   var type = msgString[1]
   console.log("Type =", type)
 
-  if (type == "resposta") {
-    // utilizadores resposta id valor
-    var id = msgString[2]
-    sub_socket.emit(id, message)
-  }
+  switch (type) {
 
-  else {
-    console.log("apostas nao sabe o que fazer com pedido")
-    console.log("Array: " + msgString)
-  }
+    case "resposta":
+        // Message indica qual o evento que devemos acordar
+        // utilizadores resposta id valor
+      var id = msgString[2]
+      sub_socket.emit(id, message)
+      
+      break;
+
+    case "eventoFechou":
+      // eventos eventoFechou idEvento resultado oddVencedora
+      // 1 - Verificar apostas no evento cujo prognostico = resultado
+      var idEvento = msgString[2]
+      var result = msgString[3]
+      var oddVencedora = parseFloat( msgString[4] )
+      var apostasEvento = await Aposta.listByEvento(idEvento)
+      apostasEvento.forEach(aposta => {
+        // Se acertou na aposta
+        if (aposta.prognostico == result) {
+          var user = aposta.user
+          var total = parseFloat( aposta.valor) * oddVencedora
+
+          pub_socket.send(["utilizadores", "apostas aumentaSaldo " + user + " " + total])
+
+          // Preciso de esperar por resposta? Vou assumir que nao
+
+        }
+        // Fecha a aposta de qualquer forma
+        // Com await nao funciona
+        var marcarFechado =  Aposta.payAposta(aposta._id)
+        
+      });
+
+      //Marcar como finalizado, para responder ao pedido REST
+      pub_socket.send(["eventos", "apostas eventoFechouResposta " + idEvento + " ok"])
+      break;
+
 
   
+    default:
+      console.log("Não sei o que fazer com message " + message)
 
+      break;
+  }
 };
 
-sub_socket.on("message", trataPedido);
 
 var app = express();
 app.use(cors())
@@ -78,11 +115,11 @@ app.use( function(req, res, next) {
   const token = req.headers.authorization
   console.log("Token = " + token)
   jwt.verify(token, "EW2019", function (err, payload) {
-      console.log("Payload é " + JSON.stringify(payload))
+      console.log(payload)
       if (payload) {
-          console.log("User existe, preencher req.user");
-                  req.user=payload
-                  next()
+        req.user = payload;
+        next()
+
       } else {
          next()
       }
@@ -103,6 +140,7 @@ app.post("/apostas", async (req,res) => {
 
   //Envia ao micro servico de utilizadores apostas saldo user
   // recebe utilizadores resposta nuno 12345
+
   const respostaSaldo = (message) => {
     console.log("Foi acordada a respostaSaldo, mensagem : " + message.toString())
     var messageBody = message.toString().split(" ")
@@ -137,11 +175,12 @@ app.post("/apostas", async (req,res) => {
         }
         sub_socket.once(user, respostaRetiraSaldo)
       }
+      else {
+        res.jsonp({erro: "Saldo insuficiente, o seu saldo é de " + saldo})
+      }
 
     }
-    else {
-      res.json({erro: "Saldo insuficiente"})
-    }
+    
   }
 
   sub_socket.once(user, respostaSaldo)

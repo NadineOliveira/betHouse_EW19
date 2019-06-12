@@ -42,10 +42,17 @@ module.exports.getSaldo = email => {
     .exec()
 }
 
-
+// Retira Saldo
 module.exports.retiraSaldo = (email, valorGasto) => {
     return User
     .findOneAndUpdate({email: email},{$inc: {saldo: -valorGasto}})
+    .exec()
+}
+
+// Aumenta Saldo
+module.exports.aumentaSaldo = (email, valor) => {
+    return User
+    .findOneAndUpdate({email: email},{$inc: {saldo: valor}})
     .exec()
 }
 

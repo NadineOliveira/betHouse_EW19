@@ -47,14 +47,14 @@ module.exports.insert = event => {
     return Evento.create(event)
 }
 
-module.exports.finishEvent = async (id) => {
+module.exports.finishEvent = async (id, result) => {
     var event = await this.getById(id)
 
     if(!event)
       throw new Error("Evento não encontrado!")
     
     
-      return Evento.findByIdAndUpdate({_id: id},{$set: {estado: 1}})
+      return Evento.findByIdAndUpdate({_id: id},{$set: {estado: result}})
             .exec()
     
 }
