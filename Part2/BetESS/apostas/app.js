@@ -187,15 +187,32 @@ app.post("/apostas", async (req,res) => {
 })
 
 app.get("/apostas", async (req,res) => {
-  Aposta.listReceber()
+  if (req.user) {
+    // Está autenticado, filtrar apostas por id
+    var email = req.user.email
+    Aposta.listReceber(email)
       .then(apostas => res.jsonp(apostas))
-      .catch(err => res.status(500).send(err))     
+      .catch(err => res.status(500).send(err))
+
+  }
+  else {
+    res.send("Nao esta autenticado")
+  }
+       
 })
 
 app.get("/apostas/recebidas", async (req,res) => {
-  Aposta.listRecebidas()
+  if (req.user) {
+    // Está autenticado, filtrar apostas por id
+    var email = req.user.email
+    Aposta.listReceber(email)
       .then(apostas => res.jsonp(apostas))
-      .catch(err => res.status(500).send(err))     
+      .catch(err => res.status(500).send(err))
+
+  }
+  else {
+    res.send("Nao esta autenticado")
+  }
 })
 
 app.get("/apostas/total", async (req,res) => {

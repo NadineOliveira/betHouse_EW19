@@ -8,18 +8,18 @@ module.exports.list = () => {
         .exec()
 }
 
-// Lista de apostas por receber
-module.exports.listReceber = () => {
+// Lista de apostas por receber, dado um utilizador
+module.exports.listReceber = (email) => {
     return Aposta
-        .find({recebido: 0})
+        .find({recebido: 0, user : email})
         .sort({data: 1})
         .exec()
 }
 
-// Lista de apostas recebidas
+// Lista de apostas recebidas, dado um utilizador
 module.exports.listRecebidas = () => {
     return Aposta
-        .find({recebido: 1})
+        .find({recebido: 1, user : email})
         .sort({data: 1})
         .exec()
 }
