@@ -32,7 +32,7 @@ export default class Home extends Component {
 }
  
 */
-const eventos =  getEventos();
+//const eventos =  getEventos();
 
 const products = [ {id:"5d0045df5355770012aabd12",data: '2019-12-12',equipa1:"Porto",equipa2:"Benfica",odd1:1.2,oddx:3,odd2:2}];
 const columns = [{
@@ -136,7 +136,6 @@ export default class Home extends React.Component {
       <div>
         <h1 class="text-center">BetESS </h1>
         <p>{this.state.token} </p>
-        <p>{JSON.stringify(eventos)}</p>
         {this.state.token  ? (<BootstrapTable keyField='id' data={ products } columns={ columns } expandRow={ expandRow }/>)
           : (<BootstrapTable keyField='id' data={ products } columns={ columns } expandRow={ expandRow1 }/>)}
       
