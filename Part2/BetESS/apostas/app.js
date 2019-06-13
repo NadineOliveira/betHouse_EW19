@@ -108,6 +108,10 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(bodyParser.urlencoded({
+  extended: false
+}));
+
 //Middleware para verificação de existencia de header com jwt token
 app.use( function(req, res, next) {
   try {
@@ -131,60 +135,64 @@ app.use( function(req, res, next) {
 
 // Rotas começam aqui
 app.post("/apostas", async (req,res) => {
-  var data = req.body.data
-  var valor = req.body.valor
-  var prognostico = req.body.prognostico
-  var evento = req.body.evento
-  var user = req.user.email
-  pub_socket.send(["utilizadores", "apostas saldo " + user])
+  if (req.user) {
+    var data = req.body.data
+    var valor = req.body.valor
+    var prognostico = req.body.prognostico
+    var evento = req.body.evento
+    var user = req.user.email
+    pub_socket.send(["utilizadores", "apostas saldo " + user])
 
-  //Envia ao micro servico de utilizadores apostas saldo user
-  // recebe utilizadores resposta nuno 12345
+    //Envia ao micro servico de utilizadores apostas saldo user
+    // recebe utilizadores resposta nuno 12345
 
-  const respostaSaldo = (message) => {
-    console.log("Foi acordada a respostaSaldo, mensagem : " + message.toString())
-    var messageBody = message.toString().split(" ")
-    var type = messageBody[1]
-    if (type == "resposta") {
+    const respostaSaldo = (message) => {
+      console.log("Foi acordada a respostaSaldo, mensagem : " + message.toString())
+      var messageBody = message.toString().split(" ")
+      var type = messageBody[1]
+      if (type == "resposta") {
 
-      var saldo = parseFloat(messageBody[3])
-      console.log("Recebi valor " + saldo)
+        var saldo = parseFloat(messageBody[3])
+        console.log("Recebi valor " + saldo)
 
-      if (saldo >= parseFloat(valor)) {
-        
-        pub_socket.send(["utilizadores", "apostas retiraSaldo " + user + " " + parseFloat(valor)])
+        if (saldo >= parseFloat(valor)) {
+          
+          pub_socket.send(["utilizadores", "apostas retiraSaldo " + user + " " + parseFloat(valor)])
 
-        const respostaRetiraSaldo = (message) => {
-          // recebe utilizadores resposta id ok
-          console.log("Foi acordada a respostaRetiraSaldo, mensagem : " + message.toString())
-          var msgBody = message.toString().split(" ")
-          var type = msgBody[1]
-          if (type == "resposta") {
-            var resposta = msgBody[3]
+          const respostaRetiraSaldo = (message) => {
+            // recebe utilizadores resposta id ok
+            console.log("Foi acordada a respostaRetiraSaldo, mensagem : " + message.toString())
+            var msgBody = message.toString().split(" ")
+            var type = msgBody[1]
+            if (type == "resposta") {
+              var resposta = msgBody[3]
 
-            console.log("Recebi resposta à retirada de saldo " + resposta)
-            if (resposta == "ok") {
-              console.dir({data: data, valor: valor, prognostico: prognostico, recebido: 0, evento: evento, user:user})
-              Aposta.insert({data: data, valor: valor, prognostico: prognostico, recebido: 0, evento: evento, user:user})
-              .then(aposta => res.jsonp(aposta))
-              .catch(err => res.status(500).send(err)) 
+              console.log("Recebi resposta à retirada de saldo " + resposta)
+              if (resposta == "ok") {
+                console.dir({data: data, valor: valor, prognostico: prognostico, recebido: 0, evento: evento, user:user})
+                Aposta.insert({data: data, valor: valor, prognostico: prognostico, recebido: 0, evento: evento, user:user})
+                .then(aposta => res.jsonp(aposta))
+                .catch(err => res.status(500).send(err)) 
+              }
+            
             }
           
           }
-        
+          sub_socket.once(user, respostaRetiraSaldo)
         }
-        sub_socket.once(user, respostaRetiraSaldo)
-      }
-      else {
-        res.jsonp({erro: "Saldo insuficiente, o seu saldo é de " + saldo})
-      }
+        else {
+          res.jsonp({erro: "Saldo insuficiente, o seu saldo é de " + saldo})
+        }
 
+      }
+      
     }
-    
+
+    sub_socket.once(user, respostaSaldo)
   }
-
-  sub_socket.once(user, respostaSaldo)
-
+  else {
+    res.send("Não está autenticado")
+  }
 })
 
 app.get("/apostas", async (req,res) => {

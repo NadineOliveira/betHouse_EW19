@@ -153,8 +153,8 @@ app.post('/utilizadores/login', async function(req,res){
   var user = await User.validatePassword(email, password)
 
   if(user){
-      var token = jwt.sign({ email : user.email}, key.tokenKey);
-      res.jsonp({ token })
+      var token = jwt.sign({ email : user.email, premium : user.premium, admin : user.admin}, key.tokenKey); // Fica no token também
+      res.jsonp({ token, "premium" : user.premium, "admin" : user.admin }) // Para o frontend saber se é premium ou não
   } 
   else res.status(400).send("Erro no Login")
 });
@@ -162,10 +162,12 @@ app.post('/utilizadores/login', async function(req,res){
 app.post('/utilizadores', async (req,res) => {
   var email = req.body.email;
   var password = req.body.password;
-  var novoUser = await User.inserir({email: email, password: password, saldo : 0})
+  var premium = req.body.premium;
+  var admin = req.body.admin;
+  var novoUser = await User.inserir({email: email, password: password, saldo : 0, premium : premium, admin : admin})
   if (novoUser) {
-    var token = jwt.sign({ email : novoUser.email}, key.tokenKey);
-    res.status(200).json({ token });
+    var token = jwt.sign({ email : novoUser.email, premium : novoUser.premium, admin : novoUser.admin}, key.tokenKey); // Fica no token também
+    res.jsonp({ token, "premium" : novoUser.premium, "admin" : novoUser.admin }) // Para o frontend saber se é premium ou não
     }
   else {
     res.status(500).send("Erro no registo!")

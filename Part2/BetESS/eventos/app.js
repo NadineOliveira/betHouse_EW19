@@ -5,6 +5,8 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var Eventos = require('./controllers/evento')
 var cors = require('cors')
+var bodyParser = require('body-parser');
+var jwt = require("jsonwebtoken");
 
 var mongoose = require('mongoose')
 
@@ -76,6 +78,10 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(bodyParser.urlencoded({
+  extended: false
+}));
+
 //Middleware para verificação de existencia de header com jwt token
 app.use( function(req, res, next) {
   try {
@@ -83,17 +89,21 @@ app.use( function(req, res, next) {
     const token = req.headers.authorization
     console.log("Token = " + token)
     jwt.verify(token, "EW2019", function (err, payload) {
+        console.log("Erro : " + err)
+      
         console.log(payload)
         if (payload) {
           req.user = payload;
           next()
 
         } else {
+          console.log("Payload vazio")
           next()
         }
     })
   }
   catch(e){
+    console.log("Erro cenas : " + e)
     next()
   }
 });
@@ -101,21 +111,40 @@ app.use( function(req, res, next) {
 
 // Rotas começam aqui
 app.post("/eventos", async (req,res) => {
-  var odd1 = req.body.odd1
-  var oddx = req.body.oddx
-  var odd2 = req.body.odd2
-  var data = req.body.data
-  var equipa1 = req.body.equipa1
-  var equipa2 = req.body.equipa2
-  Eventos.insert({odd1: odd1, oddx: oddx, odd2: odd2, data: data, estado: 0, equipa1: equipa1, equipa2: equipa2})
-    .then(evento => res.jsonp(evento))
-    .catch(err => res.status(500).send(err))
+  if (req.user && req.user.admin)
+  {
+    var odd1 = req.body.odd1
+    var oddx = req.body.oddx
+    var odd2 = req.body.odd2
+    var data = req.body.data
+    var equipa1 = req.body.equipa1
+    var equipa2 = req.body.equipa2
+    var premium = req.body.premium
+    Eventos.insert({odd1: odd1, oddx: oddx, odd2: odd2, data: data, estado: 0, equipa1: equipa1, equipa2: equipa2, premium : premium})
+      .then(evento => res.jsonp(evento))
+      .catch(err => res.status(500).send(err))
+  }
+  else {
+    res.send("Não possui privilégios para adicionar eventos")
+  }
 })
 
 app.get("/eventos", async (req,res) => {
-  Eventos.listByEstado(0)
-      .then(eventos => res.jsonp(eventos))
-      .catch(err => res.status(500).send(err))     
+  console.log("Req.user = " + req.user)
+  // Se esta autenticado e é premium, mostrar tudo
+  if (req.user && req.user.premium) {
+    console.log("Premium pediu eventos")
+    // Se é premium, listar todos os eventos incluindo os premium
+    Eventos.listByEstadoPremium(0)
+        .then(eventos => res.jsonp(eventos))
+        .catch(err => res.status(500).send(err))
+  }
+  else {
+    //Lista eventos nao premium, pois é user normal ou nao autenticado
+    Eventos.listByEstado(0)
+        .then(eventos => res.jsonp(eventos))
+        .catch(err => res.status(500).send(err))
+  }
 })
 
 app.get("/eventos/top", async (req,res) => {
@@ -143,46 +172,51 @@ app.get("/eventos/data/:data", async (req,res) => {
 })
 
 app.get("/eventos/concluir/:id/:result", async (req,res) => {
-  var idEvento = req.params.id
-  var result = req.params.result
+  if (req.user && req.admin) {
+    var idEvento = req.params.id
+    var result = req.params.result
 
-  var evento = await Eventos.getById(idEvento)
-  var oddVencedora = 0
+    var evento = await Eventos.getById(idEvento)
+    var oddVencedora = 0
 
-  switch (result) {
-    case "1":
-      oddVencedora = evento.odd1
+    switch (result) {
+      case "1":
+        oddVencedora = evento.odd1
 
-    break;
+      break;
 
-    case "2":
-      oddVencedora = evento.odd2
+      case "2":
+        oddVencedora = evento.odd2
+        
+      break;
+
+      case "3":
+        oddVencedora = evento.oddx
+        
+      break;
+    }
       
-    break;
+    // Notificar apostas que o evento com id ID terminou e enviar resultado e odd do resultado, para fazer contas nas apostas
+    pub_socket.send(["apostas", "eventos eventoFechou " + idEvento + " " + result + " " + oddVencedora ])
 
-    case "3":
-      oddVencedora = evento.oddx
-      
-    break;
+    const respostaFecharEvento = (message) => {
+      // Recebi resposta, verificar se é ok
+      // "apostas eventoFechouResposta " + idEvento + " ok"
+        var msg = message.toString().split(" ")
+        var feedback = msg[3]
+
+        if (feedback == "ok") {
+          Eventos.finishEvent(idEvento, result)
+            .then(evento => res.jsonp(evento))
+            .catch(err => res.status(500).send(err))
+        }
+    }
+
+        sub_socket.once(idEvento, respostaFecharEvento)
   }
-    
-  // Notificar apostas que o evento com id ID terminou e enviar resultado e odd do resultado, para fazer contas nas apostas
-  pub_socket.send(["apostas", "eventos eventoFechou " + idEvento + " " + result + " " + oddVencedora ])
-
-  const respostaFecharEvento = (message) => {
-    // Recebi resposta, verificar se é ok
-    // "apostas eventoFechouResposta " + idEvento + " ok"
-      var msg = message.toString().split(" ")
-      var feedback = msg[3]
-
-      if (feedback == "ok") {
-        Eventos.finishEvent(idEvento, result)
-          .then(evento => res.jsonp(evento))
-          .catch(err => res.status(500).send(err))
-      }
+  else {
+    res.send("Não possui privilégios para fechar eventos")
   }
-
-      sub_socket.once(idEvento, respostaFecharEvento)
 })
 
 // catch 404 and forward to error handler

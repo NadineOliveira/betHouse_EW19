@@ -20,8 +20,17 @@ module.exports.topList = async () => {
         .exec()
 }
 
-// Lista de eventos por Estado
+// Lista de eventos por Estado para utilizadores normais
 module.exports.listByEstado = estado => {
+    return Evento
+    .find({estado: estado, premium : false})
+    .sort({date: -1})
+    .exec()
+}
+
+
+// Lista de eventos por Estado para utilizadores premium
+module.exports.listByEstadoPremium = estado => {
     return Evento
     .find({estado: estado})
     .sort({date: -1})

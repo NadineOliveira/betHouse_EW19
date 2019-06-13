@@ -4,7 +4,9 @@ var bcrypt = require('bcrypt');
 var UserSchema = new mongoose.Schema({
     email: {type:String, unique:true},
     password: String,
-    saldo: Number
+    saldo: Number,
+    premium : Boolean,
+    admin : Boolean
 });
 
 
