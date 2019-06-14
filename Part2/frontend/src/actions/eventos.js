@@ -1,11 +1,11 @@
 import axios from 'axios';
 
-export const getEventos = async () => dispatch => {
-    axios.get('http://localhost/eventos')
+export const encerraEvento = async (id,result) => dispatch => {
+    axios.post('http://localhost/eventos/concluir/'+id+"/"+result)
             .then(res => {
                 return res.data;
             })
             .catch(err => {
-                return [];
+                alert(err);
             });
 }

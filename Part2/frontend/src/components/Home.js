@@ -4,51 +4,23 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import Button from 'react-bootstrap/Button';
 import MyVerticallyCenteredModal from './ModalAposta';
-import {getEventos} from '../actions/eventos'
+import {encerraEvento} from '../actions/eventos'
 import axios from 'axios';
 import paginationFactory from 'react-bootstrap-table2-paginator';
-/*
-var data = [
-  {id: 1, name: 'Gob', value: '2'},
-  {id: 2, name: 'Buster', value: '5'},
-  {id: 3, name: 'George Michael', value: '4'}
-];
 
-var rows = [
-  { id: 1, firstName: 'Paul', lastName: 'Darragh', }
-]
-var columns = [
-  { accessor: 'firstName', label: 'First Name', priorityLevel: 1, position: 1, minWidth: 150, },
-  { accessor: 'lastName', label: 'Last Name', priorityLevel: 2, position: 2, minWidth: 150, },
-]
-export default class Home extends Component {
-  render() {
-    return (
-      <div>
-        <p className="Table-header">BetESS</p>
-        <Table data={data}/>
-      </div>
-    );
-  }
-}
- 
-*/
 const products = [];
 
 //const products = [ {_id:"5d0045df5355770012aabd12",data: '2019-12-12',equipa1:"Porto",equipa2:"Benfica",odd1:1.2,oddx:3,odd2:2}];
 const columns = [{
   dataField: 'data',
   text: 'Data',
-  headerStyle: { backgroundColor: 'gray' },
   
 }, {
   dataField: 'equipa1',
   text: 'Equipa',
-  headerStyle: { backgroundColor: 'gray' }
 }, {
   dataField: 'equipa2',
   text: 'Equipa',
-  headerStyle: { backgroundColor: 'gray' }
 }];
 
 function isLoggedIn() {
@@ -60,34 +32,42 @@ function isLoggedIn() {
 }
 
 
-export default class Home extends React.Component {
+class Home extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      backgroundColor: "blue",
       value: "", 
       show: false,
       modalShow: false, 
       token: localStorage.getItem('jwtToken'), 
+      premium: localStorage.getItem('premium'), 
+      admin: localStorage.getItem('admin'), 
       products: []
     };
-    axios.get('http://localhost/eventos').then(response => {
-      this.setState({products: response.data})
-    })
+    
     this.aposta = {data: "", valor: "", prognostico: "", evento: ""}
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleShow = this.handleShow.bind(this);
     this.handleClose = this.handleClose.bind(this);
   }
+  componentWillMount(){
+      axios.get('http://localhost/eventos').then(response => {
+        this.setState({products: response.data})
+    })
+    alert(this.state.products)
+  }
   handleSubmit(row,event) {
     //alert('Equipa Selecionada: ' + JSON.stringify(row));
     event.preventDefault();
     this.setState({ modalShow: true });
   }
-  handleEncerrar(row,event) {
+  handleEncerrar(row,equipa,event) {
     //alert('Equipa Selecionada: ' + JSON.stringify(row));
     //encerrarEvento
     alert("Encerra evento "+ JSON.stringify(row._id))
+    encerraEvento(row._id,equipa);
     event.preventDefault();
     this.setState({ modalShow: true });
   }
@@ -171,8 +151,7 @@ export default class Home extends React.Component {
             <option value={`${row.equipa2}-3`}>{`${row.equipa2}`}</option>
           </select>
         </label>
-        <Button variant="outline-dark" onClick={event=>this.handleEncerrar(row,event)}>Fechar</Button>
-
+        <Button variant="outline-dark" onClick={event=>this.handleEncerrar(row,this.state.value,event)}>Fechar</Button>
         </form>
           
       </div>
@@ -180,37 +159,21 @@ export default class Home extends React.Component {
   };
 
   
-const pageButtonRenderer = ({
-  page,
-  active,
-  disable,
-  title,
-  onPageChange
-}) => {
-  const activeStyle = {};
-  
-    activeStyle.backgroundColor = 'black';
-    activeStyle.color = 'black';
-  return (
-    <li className="page-item">
-      <a href="#" style={ activeStyle }>{ page }</a>
-    </li>
-  );
-};
-const options = {
-  pageButtonRenderer
-};
+
     return (
-      <div class="w-auto p-3" >
+      <div className="application" >
+        <h1 class="text-center"> </h1>
         <h1 class="text-center">BetESS </h1>
         <p>{this.state.token} </p>
         {this.state.token  ? (<BootstrapTable keyField='id' data={ this.state.products } columns={ columns } expandRow={ expandRowAdmin }
-                              pagination={ paginationFactory(options) }/>)
+                              pagination={ paginationFactory() } bordered={false}/>)
           : (<BootstrapTable keyField='id' data={ this.state.products } columns={ columns } expandRow={ expandRow1 }
-          pagination={ paginationFactory(options) }/>)}
-      
+          pagination={ paginationFactory() } bordered={false}/>)}
+        {this.state.token ? (<Button variant="outline-dark" >Adicionar Evento</Button>)
+        : null}      
       </div>
       
     );
   }
 }
+export default Home;
