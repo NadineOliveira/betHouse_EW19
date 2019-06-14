@@ -8,6 +8,8 @@ import MyVerticallyCenteredModalA from './ModelAddAposta';
 import {encerraEvento} from '../actions/eventos'
 import axios from 'axios';
 import paginationFactory from 'react-bootstrap-table2-paginator';
+import PropTypes from 'prop-types';
+
 
 const products = [];
 
@@ -52,6 +54,7 @@ class Home extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleShow = this.handleShow.bind(this);
     this.handleClose = this.handleClose.bind(this);
+    this.handleEncerrar = this.handleEncerrar.bind(this);
   }
   componentWillMount(){
       axios.get('http://localhost/eventos').then(response => {
@@ -67,10 +70,10 @@ class Home extends React.Component {
   handleEncerrar(row,equipa,event) {
     //alert('Equipa Selecionada: ' + JSON.stringify(row));
     //encerrarEvento
+    event.preventDefault();
     alert("Encerra evento "+ JSON.stringify(row._id) + ' - ' + this.state.value + ' - ' + equipa )
-    alert("Encerrar: " +JSON.stringify(encerraEvento(row._id,this.state.value,equipa)))
+    encerraEvento(row._id,equipa.split("-")[1])
     this.setState({ value: ""})
-    this.setState({ modalShow: true });
   }
   handleAdicionar(event) {
     //alert('Equipa Selecionada: ' + JSON.stringify(row));
@@ -115,7 +118,7 @@ class Home extends React.Component {
                       <option value={`${row.equipa2}-3`}>{`${row.equipa2}`}</option>
                     </select>
                   </label>
-                  <Button variant="outline-dark" onClick={event=>this.handleEncerrar(row,event)}>FecharEvento</Button>
+                  <Button variant="outline-dark" onClick={event=>this.handleEncerrar(row,this.state.value,event)}>FecharEvento</Button>
                 </div>)
       else 
         return (<div>
@@ -174,4 +177,5 @@ class Home extends React.Component {
     );
   }
 }
+
 export default Home;

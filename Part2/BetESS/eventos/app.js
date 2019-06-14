@@ -173,6 +173,9 @@ app.get("/eventos/data/:data", async (req,res) => {
 })
 
 app.get("/eventos/concluir/:id/:result", async (req,res) => {
+  console.log("Req.user: "+req.user)
+  console.log("Req.admin: "+req.admin)
+
   if (req.user && req.admin) {
     var idEvento = req.params.id
     var result = req.params.result
@@ -196,7 +199,6 @@ app.get("/eventos/concluir/:id/:result", async (req,res) => {
         
       break;
     }
-      
     // Notificar apostas que o evento com id ID terminou e enviar resultado e odd do resultado, para fazer contas nas apostas
     pub_socket.send(["apostas", "eventos eventoFechou " + idEvento + " " + result + " " + oddVencedora ])
 
