@@ -32,7 +32,7 @@ module.exports.listByEstado = estado => {
 // Lista de eventos por Estado para utilizadores premium
 module.exports.listByEstadoPremium = estado => {
     return Evento
-    .find({estado: estado, premium : true})
+    .find({estado: estado})
     .sort({date: -1})
     .exec()
 }

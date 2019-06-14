@@ -57,7 +57,7 @@ class Home extends React.Component {
       axios.get('http://localhost/eventos').then(response => {
         this.setState({products: response.data})
     })
-    alert(this.state.products)
+    //alert(this.state.products)
   }
   handleSubmit(row,event) {
     //alert('Equipa Selecionada: ' + JSON.stringify(row));
@@ -67,9 +67,9 @@ class Home extends React.Component {
   handleEncerrar(row,equipa,event) {
     //alert('Equipa Selecionada: ' + JSON.stringify(row));
     //encerrarEvento
-    alert("Encerra evento "+ JSON.stringify(row._id))
-    encerraEvento(row._id,equipa);
-    event.preventDefault();
+    alert("Encerra evento "+ JSON.stringify(row._id) + ' - ' + this.state.value + ' - ' + equipa )
+    alert("Encerrar: " +JSON.stringify(encerraEvento(row._id,this.state.value,equipa)))
+    this.setState({ value: ""})
     this.setState({ modalShow: true });
   }
   handleAdicionar(event) {
@@ -89,6 +89,56 @@ class Home extends React.Component {
     this.setState({ show: true });
   }
 
+
+  eventosCondition = () => {
+    if(this.state.token && this.state.admin === "false") {
+      return (<form>
+        <Button variant="outline-dark" onClick={event=>this.handleAdicionar(event)}>Adicionar Aposta</Button>
+        <MyVerticallyCenteredModalA
+          show={this.state.modalShow}
+          onHide={() => this.setState({ modalShow: false })}
+        />
+      </form>)
+    } else return null 
+  }
+
+  buttonCondition = (row) => {
+    if(this.state.token) {
+      if(this.state.admin === "true")
+        return (<div>
+                  <label>
+                    Selecione a equipa: 
+                    <select value={this.state.value} onChange={this.handleChange}>
+                      <option value="" selected disabled hidden>Selecione</option>
+                      <option value={`${row.equipa1}-1`}>{`${row.equipa1} `}</option>
+                      <option value={`Empate-2`}>Empate</option>
+                      <option value={`${row.equipa2}-3`}>{`${row.equipa2}`}</option>
+                    </select>
+                  </label>
+                  <Button variant="outline-dark" onClick={event=>this.handleEncerrar(row,event)}>FecharEvento</Button>
+                </div>)
+      else 
+        return (<div>
+                  <label>
+                    Selecione a equipa: 
+                    <select value={this.state.value} onChange={this.handleChange}>
+                      <option value="" selected disabled hidden>Selecione</option>
+                      <option value={`${row.equipa1}-1`}>{`${row.equipa1} `}</option>
+                      <option value={`Empate-2`}>Empate</option>
+                      <option value={`${row.equipa2}-3`}>{`${row.equipa2}`}</option>
+                    </select>
+                  </label>
+                  <Button variant="outline-dark" onClick={event=>this.handleSubmit(row,event)}>Apostar</Button>
+                  <MyVerticallyCenteredModal
+                    show={this.state.modalShow}
+                    equipa = {this.state.value}
+                    row = {row}
+                    onHide={() => this.setState({ modalShow: false })}
+                  />
+                </div>)
+    } else return null
+  }
+
   render() {
 
     const expandRow = {
@@ -101,91 +151,23 @@ class Home extends React.Component {
           <p><b>{`Empate`}</b>{` ${row.odd1}`}</p>
           <p><b>{`${row.equipa2}:`}</b>{` ${row.odd2}`}</p>
           <form /*onSubmit={this.handleShow}*/>
-          <label>
-            Selecione a equipa: 
-            <select value={this.state.value} onChange={this.handleChange}>
-              <option value="" selected disabled hidden>Selecione</option>
-              <option value={`${row.equipa1}-1`}>{`${row.equipa1} `}</option>
-              <option value={`Empate-2`}>Empate</option>
-              <option value={`${row.equipa2}-3`}>{`${row.equipa2}`}</option>
-            </select>
-          </label>
-          <Button variant="outline-dark" onClick={event=>this.handleSubmit(row,event)}>Apostar</Button>
-          <MyVerticallyCenteredModal
-            show={this.state.modalShow}
-            equipa = {this.state.value}
-            row = {row}
-            onHide={() => this.setState({ modalShow: false })}
-          />
-  
+            <div>{this.buttonCondition(row)}</div>
+
           </form>
             
         </div>
       )
     };
-    
-  const expandRow1 = {
-    
-    renderer: row => (
-      
-        <div>
-        <p>{ `This Expand row is belong to rowKey ${row.data},${JSON.stringify(row)}` }</p>
-        <p><b>{`${row.equipa1}:`}</b>{` ${row.odd1}`}</p>
-        <p><b>{`Empate`}</b>{` ${row.odd1}`}</p>
-        <p><b>{`${row.equipa2}:`}</b>{` ${row.odd2}`}</p>
-
-          
-      </div>
-    )
-  };
-
-  const expandRowAdmin = {
-    
-    renderer: row => (
-      
-        <div>
-        <p>{ `This Expand row is belong to rowKey ${row.data},${JSON.stringify(row)}` }</p>
-        <p><b>{`${row.equipa1}:`}</b>{` ${row.odd1}`}</p>
-        <p><b>{`Empate`}</b>{` ${row.odd1}`}</p>
-        <p><b>{`${row.equipa2}:`}</b>{` ${row.odd2}`}</p>
-        <form /*onSubmit={this.handleShow}*/>
-        <label>
-          Selecione a equipa: 
-          <select value={this.state.value} onChange={this.handleChange}>
-            <option value="" selected disabled hidden>Resultado</option>
-            <option value={`${row.equipa1}-1`}>{`${row.equipa1} `}</option>
-            <option value={`Empate-2`}>Empate</option>
-            <option value={`${row.equipa2}-3`}>{`${row.equipa2}`}</option>
-          </select>
-        </label>
-        <Button variant="outline-dark" onClick={event=>this.handleEncerrar(row,this.state.value,event)}>Fechar</Button>
-        </form>
-          
-      </div>
-    )
-  };
-
-  
 
     return (
-      <div className="application" >
+      <div style={{margin: '0.5cm'}} className="application" >
         <h1 class="text-center"> </h1>
         <h1 class="text-center">BetESS </h1>
         <p>{this.state.token} </p>
-        {this.state.token  ? (<BootstrapTable keyField='id' data={ this.state.products } columns={ columns } expandRow={ expandRowAdmin }
-                              pagination={ paginationFactory() } bordered={false}/>)
-          : (<BootstrapTable keyField='id' data={ this.state.products } columns={ columns } expandRow={ expandRow1 }
-          pagination={ paginationFactory() } bordered={false}/>)}
-        {this.state.admin ? 
-        (
-        <form>
-          <Button variant="outline-dark" onClick={event=>this.handleAdicionar(event)}>Adicionar Evento</Button>
-          <MyVerticallyCenteredModalA
-              show={this.state.modalShow}
-              onHide={() => this.setState({ modalShow: false })}
-          />
-        </form>)    
-        : null}  
+        <BootstrapTable keyField='id' data={ this.state.products } columns={ columns } expandRow={ expandRow }
+                              pagination={ paginationFactory() } bordered={false}/>
+        <div>{ this.eventosCondition() }</div>
+        
         
       </div>
       

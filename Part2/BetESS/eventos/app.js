@@ -132,7 +132,7 @@ app.post("/eventos", async (req,res) => {
 app.get("/eventos", async (req,res) => {
   console.log("Req.user = " + req.user)
   // Se esta autenticado e é premium, mostrar tudo
-  if (req.user!=undefined && req.user.premium) {
+  if (typeof req.user !== 'undefined' && req.user.premium) {
     console.log("Premium pediu eventos")
     // Se é premium, listar todos os eventos incluindo os premium
     Eventos.listByEstadoPremium(0)
