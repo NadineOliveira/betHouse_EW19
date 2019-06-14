@@ -4,6 +4,7 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import Button from 'react-bootstrap/Button';
 import MyVerticallyCenteredModal from './ModalAposta';
+import MyVerticallyCenteredModalA from './ModelAddAposta';
 import {encerraEvento} from '../actions/eventos'
 import axios from 'axios';
 import paginationFactory from 'react-bootstrap-table2-paginator';
@@ -68,6 +69,12 @@ class Home extends React.Component {
     //encerrarEvento
     alert("Encerra evento "+ JSON.stringify(row._id))
     encerraEvento(row._id,equipa);
+    event.preventDefault();
+    this.setState({ modalShow: true });
+  }
+  handleAdicionar(event) {
+    //alert('Equipa Selecionada: ' + JSON.stringify(row));
+    //encerrarEvento
     event.preventDefault();
     this.setState({ modalShow: true });
   }
@@ -169,8 +176,17 @@ class Home extends React.Component {
                               pagination={ paginationFactory() } bordered={false}/>)
           : (<BootstrapTable keyField='id' data={ this.state.products } columns={ columns } expandRow={ expandRow1 }
           pagination={ paginationFactory() } bordered={false}/>)}
-        {this.state.token ? (<Button variant="outline-dark" >Adicionar Evento</Button>)
-        : null}      
+        {this.state.admin ? 
+        (
+        <form>
+          <Button variant="outline-dark" onClick={event=>this.handleAdicionar(event)}>Adicionar Evento</Button>
+          <MyVerticallyCenteredModalA
+              show={this.state.modalShow}
+              onHide={() => this.setState({ modalShow: false })}
+          />
+        </form>)    
+        : null}  
+        
       </div>
       
     );
