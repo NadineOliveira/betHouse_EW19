@@ -6,7 +6,10 @@ var UserSchema = new mongoose.Schema({
     password: String,
     saldo: Number,
     premium : Boolean,
-    admin : Boolean
+    admin :{
+        type: Boolean,
+        default: false
+    }
 });
 
 

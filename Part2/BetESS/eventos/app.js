@@ -28,8 +28,8 @@ const pub_address = process.env.ZMQ_EVENTOS_PUB_ADDRESS;
 pub_socket.bindSync(pub_address);
 
 
-const apostas_address = process.env.ZMQ_APOSTAS_PUB_ADDRESS;
-const utilizadores_address = process.env.ZMQ_UTILIZADORES_PUB_ADDRESS;
+    const apostas_address = process.env.ZMQ_APOSTAS_PUB_ADDRESS;
+    const utilizadores_address = process.env.ZMQ_UTILIZADORES_PUB_ADDRESS;
 
 console.log('Sub socket nos eventos a ligar-se a apostas e utilizadores');
 sub_socket.connect(apostas_address);
@@ -132,7 +132,7 @@ app.post("/eventos", async (req,res) => {
 app.get("/eventos", async (req,res) => {
   console.log("Req.user = " + req.user)
   // Se esta autenticado e é premium, mostrar tudo
-  if (req.user && req.user.premium) {
+  if (req.user!=undefined && req.user.premium) {
     console.log("Premium pediu eventos")
     // Se é premium, listar todos os eventos incluindo os premium
     Eventos.listByEstadoPremium(0)
@@ -141,6 +141,7 @@ app.get("/eventos", async (req,res) => {
   }
   else {
     //Lista eventos nao premium, pois é user normal ou nao autenticado
+    console.log("CARREGA EVENTOS GUEST")
     Eventos.listByEstado(0)
         .then(eventos => res.jsonp(eventos))
         .catch(err => res.status(500).send(err))
