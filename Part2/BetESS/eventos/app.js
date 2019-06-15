@@ -158,6 +158,22 @@ app.get("/eventos", async (req,res) => {
   }
 })
 
+app.get("/eventos/porConcluir", async (req,res) => {
+  console.log("Req.user = " + req.user)
+  //So interessa ao admin
+
+  if (typeof req.user !== 'undefined' && req.user.admin) {
+    console.log("Premium pediu eventos por concluir")
+    // Se é premium, listar todos os eventos incluindo os premium
+    Eventos.listPorConcluir()
+        .then(eventos => res.jsonp(eventos))
+        .catch(err => res.status(500).send(err))
+  }
+  else {
+    res.send("Não está autorizado!")
+  }
+})
+
 app.get("/eventos/top", async (req,res) => {
   Eventos.topList()
       .then(eventos => res.jsonp(eventos))

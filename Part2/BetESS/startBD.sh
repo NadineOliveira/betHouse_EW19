@@ -1,0 +1,1 @@
+docker-compose up bd_utilizadores bd_eventos bd_apostas
