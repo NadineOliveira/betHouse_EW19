@@ -60,9 +60,32 @@ const trataPedido = async (message) => {
       sub_socket.emit(id, message)
       
       break;
+    
+    case "apostar" : 
+      // quer saber se pode apostar num evento
+      // apostas apostar idEvento idUser
+      // Verificar se evento esta nos possiveis de ser apostado
+      var idEvento = msgString[2]
+      var idUser = msgString[3]
+      var eventos = await Eventos.listByEstadoPremium(0)
+      var response = "ko"
 
+      eventos.every(function (evento) {
+        if (evento._id == idEvento ) {
+          console.log("Evento disponivel")
+          response = "ok"
+          // Para sair do every
+          return false
+        }
+        else return true
+      });
 
-  
+      //Enviar resposta
+      pub_socket.send(["apostas", "eventos respostaEvento " + response + " " + idUser ])
+
+      break;
+    
+      
     default:
       console.log("Não sei o que fazer com message " + message)
 
