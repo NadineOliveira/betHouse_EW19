@@ -4,7 +4,7 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import Button from 'react-bootstrap/Button';
 import MyVerticallyCenteredModal from './ModalAposta';
-import MyVerticallyCenteredModalA from './ModelAddAposta';
+import MyVerticallyCenteredModalEventos from './ModalEventos';
 import {encerraEvento} from '../actions/eventos'
 import axios from 'axios';
 import paginationFactory from 'react-bootstrap-table2-paginator';
@@ -71,7 +71,6 @@ class Home extends React.Component {
     //alert('Equipa Selecionada: ' + JSON.stringify(row));
     //encerrarEvento
     event.preventDefault();
-    alert("Encerra evento "+ JSON.stringify(row._id) + ' - ' + this.state.value + ' - ' + equipa )
     encerraEvento(row._id,equipa.split("-")[1])
     this.setState({ value: ""})
   }
@@ -79,6 +78,7 @@ class Home extends React.Component {
     //alert('Equipa Selecionada: ' + JSON.stringify(row));
     //encerrarEvento
     event.preventDefault();
+
     this.setState({ modalShow: true });
   }
   handleChange(event) {
@@ -94,10 +94,10 @@ class Home extends React.Component {
 
 
   eventosCondition = () => {
-    if(this.state.token && this.state.admin === "false") {
+    if(this.state.token && (this.state.admin === "true")) {
       return (<form>
-        <Button variant="outline-dark" onClick={event=>this.handleAdicionar(event)}>Adicionar Aposta</Button>
-        <MyVerticallyCenteredModalA
+        <Button variant="outline-dark" onClick={event=>this.handleAdicionar(event)}>Adicionar Evento</Button>
+        <MyVerticallyCenteredModalEventos
           show={this.state.modalShow}
           onHide={() => this.setState({ modalShow: false })}
         />
@@ -118,7 +118,7 @@ class Home extends React.Component {
                       <option value={`${row.equipa2}-3`}>{`${row.equipa2}`}</option>
                     </select>
                   </label>
-                  <Button variant="outline-dark" onClick={event=>this.handleEncerrar(row,this.state.value,event)}>FecharEvento</Button>
+                  <Button variant="outline-dark" onClick={event=>this.handleEncerrar(row,this.state.value,event)}>Fechar Evento</Button>
                 </div>)
       else 
         return (<div>
@@ -170,8 +170,6 @@ class Home extends React.Component {
         <BootstrapTable keyField='id' data={ this.state.products } columns={ columns } expandRow={ expandRow }
                               pagination={ paginationFactory() } bordered={false}/>
         <div>{ this.eventosCondition() }</div>
-        
-        
       </div>
       
     );

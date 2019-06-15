@@ -120,6 +120,7 @@ app.post("/eventos", async (req,res) => {
     var equipa1 = req.body.equipa1
     var equipa2 = req.body.equipa2
     var premium = req.body.premium
+    console.log("BODY ---" + JSON.stringify(req.body))
     Eventos.insert({odd1: odd1, oddx: oddx, odd2: odd2, data: data, estado: 0, equipa1: equipa1, equipa2: equipa2, premium : premium})
       .then(evento => res.jsonp(evento))
       .catch(err => res.status(500).send(err))
@@ -173,10 +174,8 @@ app.get("/eventos/data/:data", async (req,res) => {
 })
 
 app.get("/eventos/concluir/:id/:result", async (req,res) => {
-  console.log("Req.user: "+req.user)
-  console.log("Req.admin: "+req.admin)
 
-  if (req.user && req.admin) {
+  if (req.user && req.user.admin) {
     var idEvento = req.params.id
     var result = req.params.result
 
@@ -207,7 +206,7 @@ app.get("/eventos/concluir/:id/:result", async (req,res) => {
       // "apostas eventoFechouResposta " + idEvento + " ok"
         var msg = message.toString().split(" ")
         var feedback = msg[3]
-
+        
         if (feedback == "ok") {
           Eventos.finishEvent(idEvento, result)
             .then(evento => res.jsonp(evento))
