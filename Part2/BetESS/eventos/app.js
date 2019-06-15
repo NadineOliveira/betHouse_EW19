@@ -181,7 +181,7 @@ app.get("/eventos/top", async (req,res) => {
 })
 
 app.get("/eventos/concluidos", async (req,res) => {
-  Eventos.listByEstadoPremium(1)
+  Eventos.listConcluidos()
       .then(eventos => res.jsonp(eventos))
       .catch(err => res.status(500).send(err))     
 })

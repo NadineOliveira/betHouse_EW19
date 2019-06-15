@@ -60,6 +60,15 @@ module.exports.listByEstadoPremium = estado => {
     .exec()
 }
 
+module.exports.listConcluidos = () => {
+
+    return Evento
+    .find({estado: {$ne: 0}})
+    .sort({date: -1})
+    .exec()
+}
+
+
 // Lista de eventos que já acabaram mas ainda não estao fechados pelo admin
 module.exports.listPorConcluir = () => {
     

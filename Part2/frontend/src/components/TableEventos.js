@@ -10,7 +10,13 @@ class Table1 extends Component {
   render() {
     return (
       <div>
-        <BootstrapTable data={this.props.data}>
+        <BootstrapTable data={this.props.data}
+          striped
+          headerStyle={ { background: '#616161', WebkitTextFillColor: '#FFFFFF' }}
+          bodyStyle={ { background: '#EEEEEE' } }
+          search
+          pagination
+        >
           <TableHeaderColumn isKey dataField='_id'>
             ID
           </TableHeaderColumn>

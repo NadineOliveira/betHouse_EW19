@@ -17,7 +17,7 @@ module.exports.listReceber = (email) => {
 }
 
 // Lista de apostas recebidas, dado um utilizador
-module.exports.listRecebidas = () => {
+module.exports.listRecebidas = (email) => {
     return Aposta
         .find({recebido: 1, user : email})
         .sort({data: 1})

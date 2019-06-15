@@ -13,7 +13,6 @@ export default class Home extends React.Component {
                   eventos: []
                 };
     axios.get('http://localhost/eventos/concluidos').then(response => {
-      alert(JSON.stringify(response.data))
       this.setState({eventos: response.data})
     })
   }
