@@ -2,8 +2,8 @@ import axios from 'axios';
 
 
 
-export const encerraEvento = async function (id,result) {
-    axios.get('http://localhost/eventos/concluir/'+id+"/"+result)
+export const encerraEvento = async function (id,result,str) {
+    axios.post('http://localhost/eventos/concluir/'+id, {estado: result,resultado: str})
             .then(res => {
                 alert("Evento Encerrado com sucesso!")
             })
@@ -12,14 +12,15 @@ export const encerraEvento = async function (id,result) {
             });
 }
 
-export const adicionaEvento = async function (equipa1,equipa2,odd1,odd2,oddx,date,premium) {
+export const adicionaEvento = async function (equipa1,equipa2,odd1,odd2,oddx,date,hour,premium) {
     axios.post('http://localhost/eventos', { 
                                             equipa1: equipa1, 
                                             equipa2: equipa2,
                                             odd1: odd1,
                                             odd2: odd2, 
                                             oddx: oddx,
-                                            data: date, 
+                                            data: date,
+                                            hora: hour, 
                                             premium: premium
                                            })
             .then(res => {

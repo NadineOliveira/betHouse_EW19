@@ -9,9 +9,10 @@ import { connect } from 'react-redux';
 class MyVerticallyCenteredModalEventos extends React.Component {
     constructor(props) {
         super(...props);
-        this.state = {data: '',odd1: 0, odd2: 0, oddx: 0, equipa1: '', equipa2: '',premium: false};
+        this.state = {data: '',hour: '',odd1: 0, odd2: 0, oddx: 0, equipa1: '', equipa2: '',premium: false};
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleDataChange = this.handleDataChange.bind(this);
+        this.handleHourChange = this.handleHourChange.bind(this);
         this.handleCasaChange = this.handleCasaChange.bind(this);
         this.handleVisitanteChange = this.handleVisitanteChange.bind(this);
         this.handleOdd1Change = this.handleOdd1Change.bind(this);
@@ -20,13 +21,17 @@ class MyVerticallyCenteredModalEventos extends React.Component {
         this.handlePremiumChange = this.handlePremiumChange.bind(this);
       }
       handleSubmit(event) {
-        alert("EVENTO s"+this.state.equipa1+' - '+this.state.equipa2+' - '+this.state.odd1+' - '+this.state.odd2+' - '+this.state.oddx+' - '+this.state.data+' - '+this.state.premium)
-        adicionaEvento(this.state.equipa1, this.state.equipa2, this.state.odd1, this.state.odd2, this.state.oddx, this.state.data, this.state.premium)
+        adicionaEvento(this.state.equipa1, this.state.equipa2, this.state.odd1, this.state.odd2, this.state.oddx, this.state.data, this.state.hour, this.state.premium)
         event.preventDefault()
       }
       handleDataChange(e) {          
         this.setState({
             data: e.target.value
+        })
+      }
+      handleHourChange(e) {          
+        this.setState({
+            hour: e.target.value
         })
       }
       handleCasaChange(e) {        
@@ -79,9 +84,27 @@ class MyVerticallyCenteredModalEventos extends React.Component {
                     <input
                     value={ this.state.data }
                     type="date"
-                    placeholder="Data"
-                    name="data"
+                    label="Data do Jogo"
                     onChange={ this.handleDataChange }
+                    />
+                </div>
+            </form>
+
+            <h4>Hora:</h4>
+            <form >
+                <div className="form-group">
+                    <input
+                    value={ this.state.hour }
+                    type="time"
+                    label="Hora de Início"
+                    defaultValue="07:30"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    inputProps={{
+                      step: 300, // 5 min
+                    }}
+                    onChange={ this.handleHourChange }
                     />
                 </div>
             </form>

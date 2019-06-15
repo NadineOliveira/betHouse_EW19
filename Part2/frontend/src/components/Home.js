@@ -40,7 +40,8 @@ class Home extends React.Component {
     super(props);
     this.state = {
       backgroundColor: "blue",
-      value: "", 
+      value: "",
+      value2: "", 
       show: false,
       modalShow: false, 
       token: localStorage.getItem('jwtToken'), 
@@ -52,6 +53,7 @@ class Home extends React.Component {
     this.aposta = {data: "", valor: "", prognostico: "", evento: ""}
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.handleChange2 = this.handleChange2.bind(this);
     this.handleShow = this.handleShow.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.handleEncerrar = this.handleEncerrar.bind(this);
@@ -67,11 +69,11 @@ class Home extends React.Component {
     event.preventDefault();
     this.setState({ modalShow: true });
   }
-  handleEncerrar(row,equipa,event) {
+  handleEncerrar(row,equipa,result,event) {
     //alert('Equipa Selecionada: ' + JSON.stringify(row));
     //encerrarEvento
     event.preventDefault();
-    encerraEvento(row._id,equipa.split("-")[1])
+    encerraEvento(row._id,equipa.split("-")[1],result)
     this.setState({ value: ""})
   }
   handleAdicionar(event) {
@@ -83,6 +85,9 @@ class Home extends React.Component {
   }
   handleChange(event) {
     this.setState({value: event.target.value});
+  }
+  handleChange2(event) {
+    this.setState({value2: event.target.value});
   }
   handleClose() {
     this.setState({ show: false });
@@ -109,16 +114,22 @@ class Home extends React.Component {
     if(this.state.token) {
       if(this.state.admin === "true")
         return (<div>
-                  <label>
-                    Selecione a equipa: 
+                  <label style={{marginRight: "1cm"}}>
+                    Selecione a equipa Vencedora e insira resultado: 
                     <select value={this.state.value} onChange={this.handleChange}>
                       <option value="" selected disabled hidden>Selecione</option>
                       <option value={`${row.equipa1}-1`}>{`${row.equipa1} `}</option>
                       <option value={`Empate-2`}>Empate</option>
                       <option value={`${row.equipa2}-3`}>{`${row.equipa2}`}</option>
                     </select>
+                    <input 
+                      value={ this.state.value2 }
+                      type="text"
+                      placeholder="0-3"
+                      onChange={ this.handleChange2 }
+                    />
                   </label>
-                  <Button variant="outline-dark" onClick={event=>this.handleEncerrar(row,this.state.value,event)}>Fechar Evento</Button>
+                  <Button variant="outline-dark" onClick={event=>this.handleEncerrar(row,this.state.value,this.state.value2,event)}>Fechar Evento</Button>
                 </div>)
       else 
         return (<div>

@@ -119,15 +119,18 @@ app.use( function(req, res, next) {
 app.post("/eventos", async (req,res) => {
   if (req.user && req.user.admin)
   {
+      console.log(req.body)
     var odd1 = req.body.odd1
     var oddx = req.body.oddx
     var odd2 = req.body.odd2
     var data = req.body.data
+    var hora = req.body.hora
     var equipa1 = req.body.equipa1
     var equipa2 = req.body.equipa2
     var premium = req.body.premium
-    console.log("BODY ---" + JSON.stringify(req.body))
-    Eventos.insert({odd1: odd1, oddx: oddx, odd2: odd2, data: data, estado: 0, equipa1: equipa1, equipa2: equipa2, premium : premium})
+    var resultado = "N/A"
+    
+    Eventos.insert({odd1: odd1, oddx: oddx, odd2: odd2, data: data, hora: hora, estado: 0, equipa1: equipa1, equipa2: equipa2,resultado: resultado, premium : premium})
       .then(evento => res.jsonp(evento))
       .catch(err => res.status(500).send(err))
   }
@@ -179,11 +182,13 @@ app.get("/eventos/data/:data", async (req,res) => {
       .catch(err => res.status(500).send(err))     
 })
 
-app.get("/eventos/concluir/:id/:result", async (req,res) => {
+app.post("/eventos/concluir/:id", async (req,res) => {
 
   if (req.user && req.user.admin) {
     var idEvento = req.params.id
-    var result = req.params.result
+
+    var result = req.body.estado
+    var resultado = req.body.resultado
 
     var evento = await Eventos.getById(idEvento)
     var oddVencedora = 0
@@ -214,7 +219,7 @@ app.get("/eventos/concluir/:id/:result", async (req,res) => {
         var feedback = msg[3]
         
         if (feedback == "ok") {
-          Eventos.finishEvent(idEvento, result)
+          Eventos.finishEvent(idEvento, result, resultado)
             .then(evento => res.jsonp(evento))
             .catch(err => res.status(500).send(err))
         }
