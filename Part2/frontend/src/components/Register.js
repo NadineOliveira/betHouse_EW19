@@ -13,15 +13,22 @@ class Register extends Component {
             email: '',
             password: '',
             password_confirm: '',
-            errors: {}
+            errors: {},
+            premium: false
         }
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handlePremiumChange = this.handlePremiumChange.bind(this);
     }
 
     handleInputChange(e) {
         this.setState({
             [e.target.name]: e.target.value
+        })
+    }
+    handlePremiumChange(e) {          
+        this.setState({
+            premium: !this.state.premium
         })
     }
 
@@ -30,7 +37,8 @@ class Register extends Component {
         const user = {
             email: this.state.email,
             password: this.state.password,
-            password_confirm: this.state.password_confirm
+            password_confirm: this.state.password_confirm,
+            premium: this.state.premium
         }
         this.props.registerUser(user, this.props.history);
     }
@@ -96,6 +104,14 @@ class Register extends Component {
                     value={ this.state.password_confirm }
                     />
                     {errors.password_confirm && (<div className="invalid-feedback">{errors.password_confirm}</div>)}
+                </div>
+                <div className="form-group">
+                    <p><b>Premium:</b></p>
+                    <input
+                    name="premium"
+                    type="checkbox"
+                    checked={this.state.premium}
+                    onChange={this.handlePremiumChange} />
                 </div>
                 <div className="form-group">
                     <button type="submit" className="btn btn-dark">

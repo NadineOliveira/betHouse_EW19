@@ -45,7 +45,6 @@ class MyVerticallyCenteredModal extends React.Component {
             <h4>Data: {this.state.evento.data}</h4>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="outline-dark" onClick={event=>this.handleSubmit(event,this.props.row,this.props.equipa)}>Apostar</Button>
             <Button variant="outline-dark" onClick={this.props.onHide}>Close</Button>
           </Modal.Footer>
         </Modal>
