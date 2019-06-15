@@ -23,8 +23,8 @@ class Table1 extends Component {
           <TableHeaderColumn dataField='equipa2'>
             Equipa 2
           </TableHeaderColumn>
-          <TableHeaderColumn dataField='estado'>
-            Concluido
+          <TableHeaderColumn dataField='resultado'>
+            Resultado
           </TableHeaderColumn>
         </BootstrapTable>
       </div>
