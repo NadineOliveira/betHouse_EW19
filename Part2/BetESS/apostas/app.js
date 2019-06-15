@@ -225,7 +225,7 @@ app.get("/apostas/recebidas", async (req,res) => {
   if (req.user) {
     // Está autenticado, filtrar apostas por id
     var email = req.user.email
-    Aposta.listReceber(email)
+    Aposta.listRecebidas(email)
       .then(apostas => res.jsonp(apostas))
       .catch(err => res.status(500).send(err))
 

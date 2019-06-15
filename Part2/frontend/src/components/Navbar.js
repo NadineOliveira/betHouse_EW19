@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { logoutUser } from '../actions/authentication';
 import { withRouter } from 'react-router-dom';
+import Button from 'react-bootstrap/Button';
 
 class Navbar extends Component {
 
@@ -42,7 +43,7 @@ class Navbar extends Component {
       )
         return(
             <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-                <Link className="text-white" to="/">BetESS</Link>
+                <Button size="lg" variant="dark" href="/" >BetESS</Button>
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
                     {isAuthenticated ? authLinks : guestLinks}
                 </div>

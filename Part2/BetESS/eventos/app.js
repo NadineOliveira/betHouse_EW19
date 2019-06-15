@@ -163,7 +163,7 @@ app.get("/eventos/porConcluir", async (req,res) => {
   //So interessa ao admin
 
   if (typeof req.user !== 'undefined' && req.user.admin) {
-    console.log("Premium pediu eventos por concluir")
+    console.log("Admin pediu eventos por concluir")
     // Se é premium, listar todos os eventos incluindo os premium
     Eventos.listPorConcluir()
         .then(eventos => res.jsonp(eventos))

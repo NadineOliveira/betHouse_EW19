@@ -6,7 +6,7 @@ import {registaAposta} from '../actions/apostas'
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-class MyVerticallyCenteredModal extends React.Component {
+class ModalAposta extends React.Component {
     constructor(props) {
         super(...props);
         this.state = {value: ''};
@@ -59,7 +59,7 @@ class MyVerticallyCenteredModal extends React.Component {
     }
   }
   
-MyVerticallyCenteredModal.propTypes = {
+  ModalAposta .propTypes = {
     registaAposta: PropTypes.func.isRequired,
     auth: PropTypes.object.isRequired,
     errors: PropTypes.object.isRequired
@@ -71,4 +71,4 @@ const mapStateToProps = (state) => ({
   errors: state.errors
 })
 
-export  default connect(mapStateToProps, { registaAposta })(MyVerticallyCenteredModal)
+export  default connect(mapStateToProps, { registaAposta })(ModalAposta)

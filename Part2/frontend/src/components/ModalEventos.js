@@ -6,7 +6,7 @@ import {adicionaEvento} from '../actions/eventos'
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-class MyVerticallyCenteredModalEventos extends React.Component {
+class ModalEventos extends React.Component {
     constructor(props) {
         super(...props);
         this.state = {data: '',hour: '',odd1: 0, odd2: 0, oddx: 0, equipa1: '', equipa2: '',premium: false};
@@ -188,7 +188,7 @@ class MyVerticallyCenteredModalEventos extends React.Component {
     }
   }
   
-MyVerticallyCenteredModalEventos.propTypes = {
+  ModalEventos.propTypes = {
     adicionaEvento: PropTypes.func.isRequired,
     auth: PropTypes.object.isRequired,
     errors: PropTypes.object.isRequired
@@ -200,4 +200,4 @@ const mapStateToProps = (state) => ({
   errors: state.errors
 })
 
-export  default connect(mapStateToProps, {adicionaEvento})(MyVerticallyCenteredModalEventos)
+export  default connect(mapStateToProps, {adicionaEvento})(ModalEventos)

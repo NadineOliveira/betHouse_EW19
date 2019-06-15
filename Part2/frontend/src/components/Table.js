@@ -2,10 +2,8 @@ import React, { Component } from 'react';
 import {BootstrapTable, 
        TableHeaderColumn} from 'react-bootstrap-table';
 import '../../node_modules/react-bootstrap-table/css/react-bootstrap-table.css'
-import Modal from 'react-bootstrap/Modal';
-import Button from 'react-bootstrap/Button';
 import axios from 'axios';
-import MyVerticallyCenteredModalEvento from './ModalEvento';
+import ModalEvento from './ModalEvento';
  
 class Table1 extends Component {
   constructor(props) {
@@ -18,7 +16,7 @@ class Table1 extends Component {
 
   onClickProductSelected(cell, row, rowIndex){
     axios.get('http://localhost/eventos/'+row.evento)
-      .then(res => {  
+      .then(res => {
         this.setState({evento: res.data, modalShow: true})
       })
   }
@@ -38,7 +36,14 @@ class Table1 extends Component {
   render() {
     return (
       <div>
-        <BootstrapTable data={this.props.data}>
+        <BootstrapTable 
+          striped
+          data={this.props.data} 
+          headerStyle={ { background: '#616161', WebkitTextFillColor: '#FFFFFF' }}
+          bodyStyle={ { background: '#EEEEEE' } }
+          search
+          pagination
+        >
           <TableHeaderColumn isKey dataField='_id'>
             ID
           </TableHeaderColumn>
@@ -48,17 +53,14 @@ class Table1 extends Component {
           <TableHeaderColumn dataField='prognostico'>
             Prognostico
           </TableHeaderColumn>
-          <TableHeaderColumn dataField='valor'>
-            valor
-          </TableHeaderColumn>
-          <TableHeaderColumn dataField='recebido'>
-            Concluido
+          <TableHeaderColumn dataSort dataField='valor'>
+            Valor
           </TableHeaderColumn>
           <TableHeaderColumn dataField='evento' dataFormat={this.cellButton.bind(this)}>
             Evento
           </TableHeaderColumn>
         </BootstrapTable>
-        <MyVerticallyCenteredModalEvento
+        <ModalEvento
                   show={this.state.modalShow}
                     evento = {this.state.evento}
                     onHide={() => this.setState({ modalShow: false })}
