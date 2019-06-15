@@ -88,22 +88,28 @@ app.use( function(req, res, next) {
     console.dir(req.headers)
     const token = req.headers.authorization
     console.log("Token = " + token)
-    jwt.verify(token, "EW2019", function (err, payload) {
-        console.log("Erro : " + err)
-      
-        console.log(payload)
-        if (payload) {
-          req.user = payload;
-          next()
-
-        } else {
-          console.log("Payload vazio")
-          next()
-        }
-    })
+    if (token) {
+      jwt.verify(token, "EW2019", function (err, payload) {
+          if (err) {
+            console.log("Erro na verificacao do token : " + err)
+            next()
+          }
+          console.log("Payload do token : " + payload)
+          if (payload) {
+            req.user = payload;
+            next()
+          }
+          else {
+            console.log("Payload vazio")
+            next()
+          }
+      })
+    }
+    else next()
   }
+
   catch(e){
-    console.log("Erro cenas : " + e)
+    console.log("Erro no middleware de autenticacao : " + e)
     next()
   }
 });

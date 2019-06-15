@@ -116,21 +116,32 @@ app.use(bodyParser.urlencoded({
 app.use( function(req, res, next) {
   try {
     console.dir(req.headers)
-  const token = req.headers.authorization
-  console.log("Token = " + token)
-  jwt.verify(token, "EW2019", function (err, payload) {
-      console.log(payload)
-      if (payload) {
-        req.user = payload;
-        next()
+    const token = req.headers.authorization
+    console.log("Token = " + token)
+    if (token) {
+      jwt.verify(token, "EW2019", function (err, payload) {
+          if (err) {
+            console.log("Erro na verificacao do token : " + err)
+            next()
+          }
+          console.log("Payload do token : " + payload)
+          if (payload) {
+            req.user = payload;
+            next()
+          }
+          else {
+            console.log("Payload vazio")
+            next()
+          }
+      })
+    }
+    else next()
+  }
 
-      } else {
-         next()
-      }
-  })
-}catch(e){
-  next()
-}
+  catch(e){
+    console.log("Erro no middleware de autenticacao : " + e)
+    next()
+  }
 });
 
 // Rotas começam aqui
