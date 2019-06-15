@@ -11,6 +11,7 @@ import Register from './components/Register';
 import Login from './components/Login';
 import Home from './components/Home';
 import Apostas from './components/Apostas';
+import Eventos from './components/Eventos';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -38,6 +39,7 @@ class App extends Component {
                   <Route exact path="/register" component={ Register } />
                   <Route exact path="/login" component={ Login } />
                   <Route exact path="/apostas" component={ Apostas } />
+                  <Route exact path="/eventos/concluidos" component={ Eventos } />
                 </div>
             </div>
           </Router>

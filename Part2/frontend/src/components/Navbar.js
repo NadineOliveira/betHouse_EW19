@@ -17,7 +17,7 @@ class Navbar extends Component {
         const authLinks = (
             <ul className="navbar-nav ml-auto">
                 <li className="nav-item">
-                    <Link className="nav-link" to="/apostas">Consultar Apostas</Link>
+                    {(!user.admin ? <Link className="nav-link" to="/apostas">Consultar Apostas</Link> : <Link className="nav-link" to="/eventos/concluidos">Histórico Eventos</Link>)}
                 </li>
                 <a href="" className="nav-link" onClick={this.onLogout.bind(this)}>
                     <img src={user.avatar} alt={user.name} title={user.name}

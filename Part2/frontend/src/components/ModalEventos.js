@@ -20,43 +20,43 @@ class MyVerticallyCenteredModalEventos extends React.Component {
         this.handlePremiumChange = this.handlePremiumChange.bind(this);
       }
       handleSubmit(event) {
-        alert("EVENTO "+this.state.equipa1+' - '+this.state.equipa2+' - '+this.state.odd1+' - '+this.state.odd2+' - '+this.state.oddx+' - '+this.state.data+' - '+this.state.premium)
-        this.props.adicionaEvento(this.state.equipa1, this.state.equipa2, this.state.odd1, this.state.odd2, this.state.oddx, this.state.data, this.state.premium)
+        alert("EVENTO s"+this.state.equipa1+' - '+this.state.equipa2+' - '+this.state.odd1+' - '+this.state.odd2+' - '+this.state.oddx+' - '+this.state.data+' - '+this.state.premium)
+        adicionaEvento(this.state.equipa1, this.state.equipa2, this.state.odd1, this.state.odd2, this.state.oddx, this.state.data, this.state.premium)
         event.preventDefault()
       }
       handleDataChange(e) {          
         this.setState({
-            data: e.target.date
+            data: e.target.value
         })
       }
-      handleCasaChange(e) {          
+      handleCasaChange(e) {        
         this.setState({
-            equipa1: e.target.equipa1
+            equipa1: e.target.value
         })
       }
       handleVisitanteChange(e) {          
         this.setState({
-            equipa2: e.target.equipa2
+            equipa2: e.target.value
         })
       }
       handleOdd1Change(e) {          
         this.setState({
-            odd1: e.target.odd1
+            odd1: e.target.value
         })
       }
       handleOdd2Change(e) {          
         this.setState({
-            odd2: e.target.odd2
+            odd2: e.target.value
         })
       }
       handleOddxChange(e) {          
         this.setState({
-            oddx: e.target.oddx
+            oddx: e.target.value
         })
       }
       handlePremiumChange(e) {          
         this.setState({
-            premium: e.target.premium
+            premium: !this.state.premium
         })
       }
     render() {

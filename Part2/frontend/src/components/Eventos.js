@@ -1,18 +1,19 @@
 import React, { Component } from 'react';
 import '../App.css';
-import Table from '../components/Table.js'
+import Table from './TableEventos.js'
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import axios from 'axios';
+
 
 export default class Home extends React.Component {
   constructor(props) {
     super(props);
     this.state = {value: "", 
                   token: localStorage.getItem('jwtToken'),
-                  apostas: []
+                  eventos: []
                 };
-    axios.get('http://localhost/apostas').then(response => {
-      this.setState({apostas: response.data})
+    axios.get('http://localhost/eventos/concluidos').then(response => {
+      this.setState({eventos: response.data})
     })
   }
 
@@ -20,9 +21,9 @@ export default class Home extends React.Component {
 
     return (
       <div>
-        <h1 class="text-center">Apostas</h1>
+        <h1 class="text-center">Eventos</h1>
         <p className="Table-header"></p>
-            <Table data={this.state.apostas}/>
+            <Table data={this.state.eventos}/>
       
       </div>
       

@@ -133,7 +133,7 @@ app.post("/eventos", async (req,res) => {
 app.get("/eventos", async (req,res) => {
   console.log("Req.user = " + req.user)
   // Se esta autenticado e é premium, mostrar tudo
-  if (typeof req.user !== 'undefined' && req.user.premium) {
+  if (typeof req.user !== 'undefined' && (req.user.premium || req.user.admin)) {
     console.log("Premium pediu eventos")
     // Se é premium, listar todos os eventos incluindo os premium
     Eventos.listByEstadoPremium(0)
@@ -156,7 +156,7 @@ app.get("/eventos/top", async (req,res) => {
 })
 
 app.get("/eventos/concluidos", async (req,res) => {
-  Eventos.listByEstado(1)
+  Eventos.listByEstadoPremium(1)
       .then(eventos => res.jsonp(eventos))
       .catch(err => res.status(500).send(err))     
 })

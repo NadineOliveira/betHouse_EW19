@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+
+
 export const encerraEvento = async function (id,result) {
     axios.get('http://localhost/eventos/concluir/'+id+"/"+result)
             .then(res => {
