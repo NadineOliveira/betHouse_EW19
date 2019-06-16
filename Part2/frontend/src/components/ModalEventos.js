@@ -22,6 +22,7 @@ class ModalEventos extends React.Component {
       }
       handleSubmit(event) {
         adicionaEvento(this.state.equipa1, this.state.equipa2, this.state.odd1, this.state.odd2, this.state.oddx, this.state.data, this.state.hour, this.state.premium)
+        this.props.onHide()
         event.preventDefault()
       }
       handleDataChange(e) {          

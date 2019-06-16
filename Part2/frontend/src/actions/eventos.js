@@ -25,6 +25,7 @@ export const adicionaEvento = async function (equipa1,equipa2,odd1,odd2,oddx,dat
                                            })
             .then(res => {
                 alert("Evento Adicionado com sucesso!")
+                window.location.reload()
             })
             .catch(err => {
                 alert(err);

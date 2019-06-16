@@ -200,10 +200,10 @@ app.post("/utilizadores/aumentaSaldo/", async (req, res) => {
 });
 
 
-app.get("/utilizadores/retiraSaldo/:email/:valor", async (req, res) => {
-  if(req.user && req.user.email === req.params.email) {
-    var email = req.params.email
-    var valor = req.params.valor
+app.post("/utilizadores/retiraSaldo/", async (req, res) => {
+  if(req.user && req.user.email === req.body.email) {
+    var email = req.body.email
+    var valor = req.body.valor
     var novoUser = await User.retiraSaldo(email, valor)
     res.jsonp (novoUser)
   } else res.status(500).send("Operação Protegida")

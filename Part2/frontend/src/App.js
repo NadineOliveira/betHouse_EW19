@@ -12,6 +12,8 @@ import Login from './components/Login';
 import Home from './components/Home';
 import Apostas from './components/Apostas';
 import Eventos from './components/Eventos';
+import Utilizadores from './components/Utilizadores';
+import AdminApostas from './components/AdminApostas';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -40,6 +42,8 @@ class App extends Component {
                   <Route exact path="/login" component={ Login } />
                   <Route exact path="/apostas" component={ Apostas } />
                   <Route exact path="/eventos/concluidos" component={ Eventos } />
+                  <Route exact path="/utilizadores" component={ Utilizadores } />
+                  <Route exact path="/AdminApostas" component={ AdminApostas } />
                 </div>
             </div>
           </Router>
