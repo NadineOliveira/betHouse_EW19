@@ -6,6 +6,7 @@ export const encerraEvento = async function (id,result,str) {
     axios.post('http://localhost/eventos/concluir/'+id, {estado: result,resultado: str})
             .then(res => {
                 alert("Evento Encerrado com sucesso!")
+                window.location.reload()
             })
             .catch(err => {
                 alert(err);

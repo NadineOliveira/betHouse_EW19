@@ -44,11 +44,11 @@ module.exports.getSaldo = email => {
 // Retira Saldo
 module.exports.retiraSaldo = async (email, valorGasto) => {
 
-    var saldo = await this.getSaldo(email)
-    
-    if (valorGasto <= saldo) {
+    var user = await this.getSaldo(email)
+    if (valorGasto <= user.saldo) {
+        var newSaldo = user.saldo - valorGasto
         return User
-        .findOneAndUpdate({email: email},{$inc: {saldo: -valorGasto}})
+        .findOneAndUpdate({email: email},{saldo: newSaldo})
         .exec()
     }
     else throw new Error ("Saldo insuficiente")

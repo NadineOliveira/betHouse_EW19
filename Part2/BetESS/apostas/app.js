@@ -217,7 +217,7 @@ app.post("/apostas", async (req,res) => {
               sub_socket.once(user, respostaRetiraSaldo)
             }
             else {
-              res.jsonp({erro: "Saldo insuficiente, o seu saldo é de " + saldo})
+              res.status(500).jsonp({erro: "Saldo insuficiente, o seu saldo é de " + saldo})
             }
 
           }

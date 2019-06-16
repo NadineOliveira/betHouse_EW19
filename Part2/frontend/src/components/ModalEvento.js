@@ -16,7 +16,7 @@ class ModalEvento extends React.Component {
       return (
         <Modal
           {...this.props}
-          size="lg"
+          size="sm"
           aria-labelledby="contained-modal-title-vcenter"
           centered
         >
@@ -26,16 +26,13 @@ class ModalEvento extends React.Component {
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <h4>Equipa Casa: {this.props.evento.equipa1}</h4>
-            <h4>Equipa Visitante: {this.props.evento.equipa2}</h4>
-            <h4>Odd 1: {this.props.evento.odd1}</h4>
-            <h4>Odd x: {this.props.evento.oddx}</h4>
-            <h4>Odd 2: {this.props.evento.odd2}</h4>
-            <h4>Data: {this.props.evento.data}</h4>
-            <h4>Hora: {this.props.evento.hora}</h4>
+            <h4>{this.props.evento.equipa1} vs {this.props.evento.equipa2}</h4>
+            <h4>{this.props.evento.data} <span style={{marginLeft: "1.5cm"}}>{this.props.evento.hora}</span></h4>
+            <h4><span>Odd 1</span><span style={{marginLeft:"0.7cm"}}>Odd x</span><span style={{marginLeft:"0.7cm"}}>Odd 2</span></h4>
+            <h4><span>{this.props.evento.odd1}</span><span style={{marginLeft:"2.4cm"}}>{this.props.evento.oddx}</span><span style={{marginLeft:"2.3cm"}}>{this.props.evento.odd2}</span></h4>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="outline-dark" onClick={this.props.onHide}>Close</Button>
+            <Button variant="outline-dark" onClick={this.props.onHide}>Fechar</Button>
           </Modal.Footer>
         </Modal>
       );

@@ -5,7 +5,7 @@ import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import axios from 'axios';  
 import {BootstrapTable, 
        TableHeaderColumn} from 'react-bootstrap-table';
-import ModalSaldo from './ModalSaldo';
+import ModalAddSaldo from './ModalAddSaldo';
 
 export default class Home extends React.Component {
   constructor(props) {
@@ -88,7 +88,7 @@ export default class Home extends React.Component {
             Editar
           </TableHeaderColumn>
         </BootstrapTable>
-        <ModalSaldo
+        <ModalAddSaldo
           show={this.state.modalShow}
           email = {this.state.value}
           onHide={() => this.setState({ modalShow: false })}

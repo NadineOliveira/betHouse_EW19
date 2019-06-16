@@ -75,7 +75,8 @@ const trataPedido = async (message) => {
       console.log("É retira Saldo")
       // Assumir que vem id logo a seguir e quantia, do tipo retiraSaldo user@gmail.com 123
       var valorGasto = parseFloat(messageSplit[3])
-      var done = User.retiraSaldo(id,valorGasto )
+      console.log(valorGasto)
+      var done = await User.retiraSaldo(id,valorGasto )
       if (done) {
         pub_socket.send([sender, "utilizadores resposta " + id + " " + "ok"])
         console.log("Saldo retirado")
@@ -85,7 +86,7 @@ const trataPedido = async (message) => {
     case "aumentaSaldo":
       // Assumir que vem id logo a seguir e quantia, do tipo aumentaSaldo user@gmail.com 123
       var valor = parseFloat(messageSplit[3])
-      var done = User.aumentaSaldo(id, valor)
+      var done = await User.aumentaSaldo(id, valor)
       if (done) {
         pub_socket.send([sender, "utilizadores resposta " + id + " " + "ok"])
         console.log("Saldo adicionado")
