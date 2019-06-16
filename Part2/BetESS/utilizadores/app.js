@@ -149,11 +149,26 @@ app.get("/utilizadores", async (req, res) => {
   })
 });
 
+app.get("/utilizadores/saldo/:email", async (req, res) => {
+  console.log("GET SALDO")
+  var email = req.params.email
+  User.getSaldo(email).then(doc => {
+    res.jsonp(doc)
+  })
+});
+
 // Aumentar saldo
 app.get("/utilizadores/aumentaSaldo/:email/:valor", async (req, res) => {
   var email = req.params.email
   var valor = req.params.valor
   var novoUser = await User.aumentaSaldo(email, valor)
+  res.jsonp (novoUser)
+});
+
+app.get("/utilizadores/retiraSaldo/:email/:valor", async (req, res) => {
+  var email = req.params.email
+  var valor = req.params.valor
+  var novoUser = await User.retiraSaldo(email, valor)
   res.jsonp (novoUser)
 });
 
