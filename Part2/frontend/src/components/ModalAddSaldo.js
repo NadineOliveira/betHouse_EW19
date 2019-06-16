@@ -57,7 +57,7 @@ class ModalAddSaldo extends React.Component {
           </Modal.Body>
           <Modal.Footer>
             <Button variant="outline-dark" onClick={event=>this.handleSubmit(event)}>Confirmar</Button>
-            <Button variant="outline-dark" onClick={this.props.onHide}>Close</Button>
+            <Button variant="outline-dark" onClick={this.props.onHide}>Fechar</Button>
           </Modal.Footer>
         </Modal>
         </div>

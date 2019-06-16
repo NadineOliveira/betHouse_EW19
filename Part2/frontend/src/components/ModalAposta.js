@@ -53,7 +53,7 @@ class ModalAposta extends React.Component {
           </Modal.Body>
           <Modal.Footer>
             <Button variant="outline-dark" onClick={event=>this.handleSubmit(event,this.props.row,this.props.equipa)}>Apostar</Button>
-            <Button variant="outline-dark" onClick={this.props.onHide}>Close</Button>
+            <Button variant="outline-dark" onClick={this.props.onHide}>Fechar</Button>
           </Modal.Footer>
         </Modal>
       );

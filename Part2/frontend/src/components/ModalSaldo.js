@@ -40,7 +40,7 @@ class ModalSaldo extends React.Component {
             </form>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="outline-dark" onClick={this.props.onHide}>Close</Button>
+            <Button variant="outline-dark" onClick={this.props.onHide}>Fechar</Button>
           </Modal.Footer>
         </Modal>
         </div>
