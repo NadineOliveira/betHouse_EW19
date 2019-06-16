@@ -126,3 +126,18 @@ body {
     content: ""; }
   .offline-doc .page-header:before {
     background-color: rgba(0, 0, 0, 0.8); }
+
+.modal {}
+
+.modal-header{
+  background-color: #424242;
+  color: #fff
+}
+
+.modal-body{
+  background-color: #fff;
+}
+
+.modal-footer{
+  background-color: #fff;
+}

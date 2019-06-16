@@ -16,6 +16,7 @@ class ModalAposta extends React.Component {
       handleSubmit(event,row,prog) {
         //alert('Valor Apostado: '+ this.state.value + JSON.stringify(row));
         this.props.registaAposta(row,this.state.value,prog)
+        this.props.onHide();
         event.preventDefault()
       }
       handleInputChange(e) {          

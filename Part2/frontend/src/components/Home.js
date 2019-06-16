@@ -149,6 +149,7 @@ class Home extends React.Component {
                     show={this.state.modalShow}
                     equipa = {this.state.value}
                     row = {row}
+                    history = {this.props.history}
                     onHide={() => this.setState({ modalShow: false })}
                   />
                 </div></form>)
@@ -195,7 +196,6 @@ class Home extends React.Component {
           <TableHeaderColumn dataField='equipa1'>Equipa 1</TableHeaderColumn>
           <TableHeaderColumn dataField='equipa2'>Equipa 2</TableHeaderColumn>
         </BootstrapTable>
-
         {this.concluirEventos()}
       </div>
 
