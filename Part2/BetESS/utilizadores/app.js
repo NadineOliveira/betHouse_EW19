@@ -144,9 +144,11 @@ app.use( function(req, res, next) {
 
 // Rotas começam aqui
 app.get("/utilizadores", async (req, res) => {
-  User.list().then(doc => {
-    res.jsonp(doc)
-  })
+  if(req.user && req.user.admin){
+    User.list().then(doc => {
+      res.jsonp(doc)
+    })
+  } else res.status(500).send("Rota Protegida")
 });
 
 app.get("/utilizadores/saldo/:email", async (req, res) => {
@@ -157,19 +159,54 @@ app.get("/utilizadores/saldo/:email", async (req, res) => {
   })
 });
 
-// Aumentar saldo
-app.get("/utilizadores/aumentaSaldo/:email/:valor", async (req, res) => {
-  var email = req.params.email
-  var valor = req.params.valor
-  var novoUser = await User.aumentaSaldo(email, valor)
-  res.jsonp (novoUser)
+
+//Update premium
+app.post("/utilizadores/premium/", async (req, res) => {
+  if(req.user && ((req.user.email === req.body.email) || req.user.admin)) {
+    var email = req.body.email
+    var premium = req.body.premium
+    var novoUser = await User.updatePremium(email, premium)
+    res.jsonp (novoUser)
+  }
+  else res.status(500).send("Operação Protegida")
 });
 
+//Update admin
+app.post("/utilizadores/admin/", async (req, res) => {
+  if(req.body.admin) {
+    if(req.user && req.user.admin){
+      var email = req.body.email
+      var user = await User.updateAdmin(email,true)
+      res.jsonp(user)
+    } else res.status(500).send("Erro ao atualizar Utilizador")
+  } else {
+    if(req.user && req.user.email===req.body.email) {
+      var email = req.body.email
+      var user = await User.updateAdmin(email,false)
+      res.jsonp(user)
+    } else res.status(500).send("Operação Protegida")
+  }
+});
+
+// Aumentar saldo
+app.post("/utilizadores/aumentaSaldo/", async (req, res) => {
+  if(req.user && ((req.user.email === req.body.email) || req.user.admin)) {
+    var email = req.body.email
+    var valor = req.body.valor
+    var novoUser = await User.aumentaSaldo(email, valor)
+    res.jsonp (novoUser)
+  }
+  else res.status(500).send("Operação Protegida")
+});
+
+
 app.get("/utilizadores/retiraSaldo/:email/:valor", async (req, res) => {
-  var email = req.params.email
-  var valor = req.params.valor
-  var novoUser = await User.retiraSaldo(email, valor)
-  res.jsonp (novoUser)
+  if(req.user && req.user.email === req.params.email) {
+    var email = req.params.email
+    var valor = req.params.valor
+    var novoUser = await User.retiraSaldo(email, valor)
+    res.jsonp (novoUser)
+  } else res.status(500).send("Operação Protegida")
 });
 
 app.post('/utilizadores/login', async function(req,res){

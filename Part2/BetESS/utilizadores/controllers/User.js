@@ -4,7 +4,7 @@ var bcrypt = require('bcrypt')
 // Lista de utilizadores
 module.exports.list = () => {
     return User
-        .find()
+        .find({},{password: false})
         .sort()
         .exec()
 }
@@ -34,7 +34,6 @@ module.exports.validatePassword = async (email, password) => {
     return user
 }
 
-
 // Devolve o saldo dado um email
 module.exports.getSaldo = email => {
     return User
@@ -59,6 +58,20 @@ module.exports.retiraSaldo = async (email, valorGasto) => {
 module.exports.aumentaSaldo = (email, valor) => {
     return User
     .findOneAndUpdate({email: email},{$inc: {saldo: valor}})
+    .exec()
+}
+
+// Update Premium
+module.exports.updatePremium = (email, premium) => {
+    return User
+    .findOneAndUpdate({email: email},{premium: premium})
+    .exec()
+}
+
+// Update Admin
+module.exports.updateAdmin = (email, admin) => {
+    return User
+    .findOneAndUpdate({email: email},{admin: admin})
     .exec()
 }
 

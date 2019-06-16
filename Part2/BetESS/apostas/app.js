@@ -269,9 +269,11 @@ app.get("/apostas/recebidas", async (req,res) => {
 })
 
 app.get("/apostas/total", async (req,res) => {
-  Aposta.list()
-      .then(apostas => res.jsonp(apostas))
-      .catch(err => res.status(500).send(err))     
+  if(req.user && req.user.admin) {
+    Aposta.list()
+        .then(apostas => res.jsonp(apostas))
+        .catch(err => res.status(500).send(err))
+  } else res.status(500).send("Rota Protegida")     
 })
 
 app.get("/apostas/:id", async (req,res) => {
@@ -293,9 +295,11 @@ app.get("/apostas/data/:data", async (req,res) => {
 })
 
 app.get("/apostas/concluir/:id", async (req,res) => {
+  if(req.user && req.user.admin) {
   Aposta.payAposta(req.params.id)
       .then(aposta => res.jsonp(aposta))
-      .catch(err => res.status(500).send(err))     
+      .catch(err => res.status(500).send(err)) 
+  } else res.status(500).send("Rota Protegida")   
 })
 
 
